@@ -1,0 +1,13 @@
+baseurl: ""
+description: Parsiad Azimzadeh's personal webpage.
+disqus:
+  shortname: parsiad
+email: parsiad.azimzadeh@gmail.com
+google_analytics: "G-97ZGWZFX7F"
+markdown: kramdown
+permalink: /blog/:year/:title/
+plugins:
+  - jekyll-feed
+  - jekyll-redirect-from
+title: Parsiad Azimzadeh
+url: "https://parsiad.ca"

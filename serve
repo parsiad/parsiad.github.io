@@ -1,0 +1,3 @@
+#!/bin/sh
+
+~/.gem/ruby/2.7.0/bin/bundle exec jekyll serve

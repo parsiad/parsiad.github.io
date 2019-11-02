@@ -1,0 +1,6 @@
+TOPTARGETS:=all clean
+
+$(TOPTARGETS):
+	$(MAKE) -C src $(MAKECMDGOALS)
+
+.PHONY: $(TOPTARGETS)

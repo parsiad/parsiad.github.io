@@ -1,0 +1,124 @@
+---
+---
+
+@charset "utf-8";
+
+$asset_url: '{{ '/assets' | absolute_url }}';
+
+@import 
+  "reset",
+  "variables",
+  "syntax-highlighting",
+  "mixins",
+  "font",
+  "base",
+  "masthead",
+  "menu",
+  "post-list",
+  "article",
+  "footnotes",
+  "search"
+;
+
+aside {
+  font-size: 0.75em;
+}
+
+body {
+  background: #757F9A;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #D7DDE8, #757F9A);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #D7DDE8, #757F9A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#avatar {
+  box-shadow: 0 0 5px #828282;
+  float: right;
+  margin: 0 0 0 1em;
+  max-width: 200px;
+  width: 30%;
+}
+
+div.language-plaintext .highlight {
+  background: #ccc;
+}
+
+div.highlight, .post {
+  overflow-x: auto;
+}
+
+div.highlight {
+  padding: 0 1em;
+}
+
+.highlight > * {
+  padding: 0;
+}
+
+.post {
+  padding: 0 0 2em 0;
+}
+
+.post, .post-content {
+  max-width: none;
+}
+
+.post a {
+  color: #757F9A;
+}
+
+.post a:hover {
+  background: #D7DDE8;
+}
+
+.post li {
+  margin: 0;
+}
+
+.post p {
+  text-indent: 0;
+  margin: 1em 0;
+}
+
+.site-credits {
+  margin: 2em auto;
+}
+
+.site-masthead h1 {
+  margin-top: 0;
+}
+
+table {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+table thead tr {
+  background-color: #D7DDE8;
+  text-align: left;
+}
+
+table th, table td {
+  padding: 0.5em;
+}
+
+table tbody tr {
+  border-bottom: 1px solid #DDD;
+}
+
+table tbody tr:nth-of-type(even) {
+  background-color: #F3F3F3;
+}
+
+table tbody tr:last-of-type {
+  border-bottom: 2px solid #D7DDE8;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
