@@ -8,7 +8,7 @@ exclude: true
 I am trying to keep track of the movies I have watched.
 The list is not (yet) exhaustive!
 
-I use 👍 to denote a movie I greatly enjoyed and reserve 🌶 for my favourites.
+I use 👍 to denote a movie I enjoyed and reserve 🌶 for my favourites.
 
 <table>
   {% for row in site.data.movies %}
