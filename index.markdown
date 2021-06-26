@@ -20,6 +20,4 @@ A CV is available on request.
 
 My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G. Labahn](https://cs.uwaterloo.ca/~glabahn/) → [G. H. Golub](https://en.wikipedia.org/wiki/Gene_H._Golub) → [A. J. Hoffman](https://en.wikipedia.org/wiki/Alan_J._Hoffman) → [P. Erdős](https://en.wikipedia.org/wiki/Paul_Erd%C5%91s).
 
-Here is [a list of movies I have seen](/movies).
-
 [![alt text](https://math.stackexchange.com/users/flair/64601.png?theme=clean "Profile for parsiad at Mathematics Stack Exchange")](https://math.stackexchange.com/users/64601/par)
