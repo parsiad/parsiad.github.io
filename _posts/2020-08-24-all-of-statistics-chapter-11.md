@@ -474,6 +474,6 @@ a = np.sqrt(sigma2) / b * (2 * np.pi)**(-n/2. + 0.5) * np.exp(
 post_prob_null = 1. / (1. + a)
 plt.figure(figsize=(1.618 * 5., 5.))
 plt.semilogx(b, post_prob_null)
-plt.title('$\\mathbb{{P}}(H_0 \\mid X^{{n={}}})$'.format(n_sims))
+plt.title('$\\mathbb{{P}}(H_0 \\mid X)$'.format(n_sims))
 plt.xlabel('$b$')
 ```
