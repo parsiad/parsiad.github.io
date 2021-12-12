@@ -37,7 +37,7 @@ $$
 Simplifying, we arrive at (\ref{eq:gk}) with $$k$$ replaced by $$k+1$$.
 Since (\ref{eq:gk}) is satisfied at $$k=1$$, it follows by induction that (\ref{eq:gk}) holds for all integers $$k\geq1$$.
 
-The form (\ref{eq:gk}) is redundant since, assuming the conditions of Schwarz/Clairaut's theorem, partial derivatives commute (e.g., $$f_{x_{1}x_{2}}=f_{x_{2}x_{1}}$$).
+The form (\ref{eq:gk}) is redundant since, assuming the conditions of [Clairaut's theorem](https://en.wikipedia.org/wiki/Symmetry_of_second_derivatives#Sufficiency_of_twice-differentiability), partial derivatives commute (e.g., $$f_{x_{1}x_{2}}=f_{x_{2}x_{1}}$$).
 For a multi-index $$i=(i_{1},\ldots,i_{d})$$ in $$\mathbb{Z}_{\geq0}^{d}$$, define $$|i|=i_{1}+\cdots+i_{d}$$ and
 
 $$
