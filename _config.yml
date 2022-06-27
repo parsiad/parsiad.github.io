@@ -24,6 +24,8 @@ description: Parsiad Azimzadeh's personal webpage.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://parsiad.ca" # the base hostname & protocol for your site, e.g. http://example.com
 
+google_analytics: "G-97ZGWZFX7F"
+
 social:
   github: parsiad
   linkedin: parsiad
