@@ -19,11 +19,11 @@ A CV is available on request.
 
 ## Miscellany
 
-My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G. Labahn](https://cs.uwaterloo.ca/~glabahn/) → [G. H. Golub](https://en.wikipedia.org/wiki/Gene_H._Golub) → [A. J. Hoffman](https://en.wikipedia.org/wiki/Alan_J._Hoffman) → [P. Erdős](https://en.wikipedia.org/wiki/Paul_Erd%C5%91s).
-
 [![alt text](https://math.stackexchange.com/users/flair/64601.png?theme=clean "Parsiad's Mathematics Stack Exchange profile")](https://math.stackexchange.com/users/64601/par)
 
 [![alt text](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "Parsiad's GitHub profile")](https://github.com/parsiad)
+
+My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G. Labahn](https://cs.uwaterloo.ca/~glabahn/) → [G. H. Golub](https://en.wikipedia.org/wiki/Gene_H._Golub) → [A. J. Hoffman](https://en.wikipedia.org/wiki/Alan_J._Hoffman) → [P. Erdős](https://en.wikipedia.org/wiki/Paul_Erd%C5%91s).
 
 A graph of my academic genealogy (using data from the [Mathematics Genealogy Project](https://www.mathgenealogy.org/)) is below.
 
