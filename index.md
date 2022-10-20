@@ -24,3 +24,7 @@ My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G.
 [![alt text](https://math.stackexchange.com/users/flair/64601.png?theme=clean "Parsiad's Mathematics Stack Exchange profile")](https://math.stackexchange.com/users/64601/par)
 
 [![alt text](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white "Parsiad's GitHub profile")](https://github.com/parsiad)
+
+A graph of my academic genealogy (using data from the [Mathematics Genealogy Project](https://www.mathgenealogy.org/)) is below.
+
+[![alt text](https://parsiad.ca/math_genealogy.svg)](https://parsiad.ca/math_genealogy.svg)
