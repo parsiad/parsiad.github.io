@@ -29,7 +29,7 @@ title: Code
   </tr>
   <tr>
     <td>
-      <a href="https://parsiad.ca/fast-engset" style="clear:left;float:left"><img alt="fast-engset" src="https://github.com/parsiad/fast-engset/blob/master/logo.png?raw=true"></a>
+      <a href="https://pypi.org/project/fast-engset" style="clear:left;float:left"><img alt="fast-engset" src="https://github.com/parsiad/fast-engset/blob/master/logo.png?raw=true"></a>
     </td>
     <td>
       A Python package providing fast and accurate routines to compute various quantities in the Engset model.
