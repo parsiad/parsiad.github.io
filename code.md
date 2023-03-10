@@ -24,6 +24,7 @@ title: Code
     </td>
     <td>
       A high-performance, open-source, header-only C++(>=11) library for pricing derivatives.
+      More generally, QuantPDE can also be used to solve <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation">Hamilton-Jacobi-Bellman</a> (HJB) equations and quasi-variational inequalities (HJBQVI).
     </td>
   </tr>
   <tr>
