@@ -3,7 +3,8 @@ date: 2015-03-01 12:00:00-0800
 layout: post
 redirect_from:
   - /blog/2015/pricing-american-binary-options/
-title: Pricing American binary options
+  - /blog/2015/pricing_american_binary_options/
+title: Closed-form expressions for perpetual and finite-maturity American binary options
 ---
 In this article, we derive the price of an American binary (a.k.a. digital) call and put options assuming that the underlying asset follows geometric Brownian motion. We handle the case in which a finite expiry time is specified for the option. We obtain results for the corresponding perpetual (i.e., no expiry) options by taking limits.
 
