@@ -160,7 +160,7 @@ where $[\cdot]$ is the [Iverson bracket](https://en.wikipedia.org/wiki/Iverson_b
 Therefore,
 \begin{equation}
     Y^\intercal Y v_j
-    = v_j [j \geq k].
+    = \lambda_j v_j [j \geq k].
 \end{equation}
 In other words, $v_j$ is also an eigenvector of $Y^\intercal Y$ with eigenvalue $\lambda_j$ if $j \geq k$ and eigenvalue $0$ otherwise.
 The desired result follows since the $k$-th principal component of $X$ is, by definition, the first principal component of $Y$.
