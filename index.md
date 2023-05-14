@@ -13,7 +13,7 @@ Previously, I worked at [Google LLC](http://google.com) in Mountain View, Califo
 Prior to that, I was a Research Post-Doctoral Assistant Professor in the [Department of Mathematics at the University of Michigan at Ann Arbor](https://lsa.umich.edu/math) under the mentorship of [Erhan Bayraktar](https://sites.lsa.umich.edu/erhan/).
 
 I hold a PhD from the [David R. Cheriton School of Computer Science](https://cs.uwaterloo.ca/) at the University of Waterloo, completed under the supervision of Professor [George Labahn](https://cs.uwaterloo.ca/~glabahn/).
-My academic work focused on both the theory and numerics of continuous-time optimal stochastic control and viscosity solutions ([this monograph](http://dx.doi.org/10.1007/978-1-4614-4286-8) gives a good introduction to theory).
+My academic work focused on both the theory and numerics of continuous-time optimal stochastic control and viscosity solutions ([this monograph](http://dx.doi.org/10.1007/978-1-4614-4286-8) gives a good introduction to the theory).
 
 A CV is available on request.
 
