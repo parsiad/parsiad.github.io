@@ -25,6 +25,7 @@ A CV is available on request.
 
 My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G. Labahn](https://cs.uwaterloo.ca/~glabahn/) → [G. H. Golub](https://en.wikipedia.org/wiki/Gene_H._Golub) → [A. J. Hoffman](https://en.wikipedia.org/wiki/Alan_J._Hoffman) → [P. Erdős](https://en.wikipedia.org/wiki/Paul_Erd%C5%91s).
 
-A graph of my academic genealogy (using data from the [Mathematics Genealogy Project](https://www.mathgenealogy.org/)) is below.
+For fun, I wrote a short [script to generate an academic genealogy graph](https://github.com/parsiad/math-genealogy-graph) using data from the [Mathematics Genealogy Project](https://www.mathgenealogy.org/).
+Mine is below.
 
 [![alt text](https://parsiad.ca/math_genealogy.svg)](https://parsiad.ca/math_genealogy.svg)
