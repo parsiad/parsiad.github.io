@@ -2,6 +2,7 @@
 date: 2023-05-02 12:00:00-0800
 layout: post
 title: Uncorrelated coordinates in PCA
+hidden: true
 ---
 Let $X$ be an $N\times p$ real matrix.
 Let $D$ be a real diagonal matrix, $w$ be a vector of nonnegative weights that sum to one, and

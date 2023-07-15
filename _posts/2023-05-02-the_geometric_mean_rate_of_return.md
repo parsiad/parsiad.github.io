@@ -2,6 +2,7 @@
 date: 2023-05-02 12:00:00-0800
 layout: post
 title: The geometric mean rate of return
+hidden: true
 ---
 Consider a horizon of disjoint periods labelled $1$ through $N$.
 On the entire horizon, an asset with a rate of return $r_n$ on the $n$-th period has a *geometric mean rate of return* of
