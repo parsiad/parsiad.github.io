@@ -6,9 +6,11 @@ redirect_from:
 title: SDEs and Monte Carlo in Octave Financial
 ---
 This post is a tutorial on my fist major contribution as maintainer of [GNU Octave financial package](http://octave.sourceforge.net/financial/): a framework to simulate [stochastic differential equations (SDEs)](https://en.wikipedia.org/wiki/Stochastic_differential_equation) of the form
-\begin{equation}
+
+$$
     dX_t = F(t, X_t) dt + G(t, X_t) dW_t
-\end{equation}
+$$
+
 where *W* is a standard *n*-dimensional [Wiener process](https://en.wikipedia.org/wiki/Wiener_process).
 
 To follow along with the examples in this post you'll need a copy of GNU Octave and the Financial package. See the [release announcement post](/blog/2016/octave_financial_0.5.0_released) for installation instructions.
@@ -16,14 +18,17 @@ To follow along with the examples in this post you'll need a copy of GNU Octave 
 ## A one dimensional example: pricing a European call
 
 A classic problem in finance is that of pricing a European [call option](https://en.wikipedia.org/wiki/Call_option). The price of a European call option with strike price *K* and expiry time *T* years from now is given by
-\begin{equation}
-    \mathbb{E}\left[ e^{-rT} \max\\{X_T - K, 0\\} \right].
-\end{equation}
+
+$$
+    \mathbb{E}\left[ e^{-rT} \max\{X_T - K, 0\} \right].
+$$
+
 In the celebrated Black-Scholes framework, the functions *F* and *G* which parameterize the SDE are taken to be *F*(*t*, *X<sub>t</sub>*) = (*r* - 𝛿) *X<sub>t</sub>* and *G*(*t*, *X<sub>t</sub>*) = 𝜎 *X<sub>t</sub>* where *r*, 𝛿, and 𝜎 are the per-annum interest, dividend, and volatility rates of the stock *X*.
 In other words,
-\begin{equation}
+
+$$
     dX_t = \left(r - \delta\right) X_t dt + \sigma X_t dW_t.
-\end{equation}
+$$
 
 When *F* and *G* are linear functions of the state variable (as they are in this case), the SDE is called a [Geometric Brownian Motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion).
 
@@ -65,17 +70,22 @@ While both implementations scale more-or-less linearly, the GNU Octave financial
 ## A two dimensional example: pricing a European basket call
 
 Consider now the basket call pricing problem
-\begin{equation}
-    \mathbb{E}\left[ e^{-rT} \max\\{\max\\{X_T^1, X_T^2\\} - K, 0\\} \right]
-\end{equation}
+
+$$
+    \mathbb{E}\left[ e^{-rT} \max\{\max\{X_T^1, X_T^2\} - K, 0\} \right]
+$$
+
 involving two stocks *X<sup>1</sup>* and *X<sup>2</sup>* which follow the SDEs
-\begin{equation}
+
+$$
     dX_t^i = \left(r^i - \delta^i\right) X_t^i dt + \sigma^i X_t^i dW_t^i \qquad \text{for } i = 1,2.
-\end{equation}
+$$
+
 To make matters more interesting, we also assume a correlation between the coordinates of the Wiener process:
-\begin{equation}
+
+$$
     dW_t^1 dW_t^2 = \rho dt.
-\end{equation}
+$$
 
 Sample code for this example is below:
 

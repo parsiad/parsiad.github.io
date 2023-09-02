@@ -3,7 +3,6 @@ date: 2015-03-01 12:00:00-0800
 layout: post
 redirect_from:
   - /blog/2015/pricing-american-binary-options/
-  - /blog/2015/pricing_american_binary_options/
 title: Closed-form expressions for perpetual and finite-maturity American binary options
 ---
 In this article, we derive the price of an American binary (a.k.a. digital) call and put options assuming that the underlying asset follows geometric Brownian motion. We handle the case in which a finite expiry time is specified for the option. We obtain results for the corresponding perpetual (i.e., no expiry) options by taking limits.
@@ -19,9 +18,11 @@ An American binary call is similar, except that it pays the holder exactly one d
 ## Mathematical formulation
 
 We assume that, under the [pricing measure](https://en.wikipedia.org/wiki/Risk-neutral_measure), the price of the stock (e.g., APPL) at time $t$ is given by 
-\begin{equation}
+
+$$
     S_t = x \exp\biggl( \left(r - \delta - \frac{1}{2} \sigma^2 \right) t + \sigma W_t \biggr)
-\end{equation}
+$$
+
 where the initial price $x$ and volatility $\sigma$ are positive, the interest rate $r$ is real, and the dividend rate $\delta$ is nonnegative.
 $W$ is a standard [Wiener process](https://en.wikipedia.org/wiki/Wiener_process).
 
@@ -33,27 +34,35 @@ Therefore, we proceed assuming the nontrivial case (i.e., $x > K$ for puts and $
 
 Let $\tau$ be the first time the asset hits level $K$.
 It follows that, for each realization, $\tau$ is either infinite or satisfies
-\begin{equation}
+
+$$
     \log s + \left( r - \delta - \frac{1}{2} \sigma^2 \right) \tau + \sigma W_\tau = \log K.
-\end{equation}
+$$
+
 We can rewrite the above equation as $\mu \tau + W_\tau = a$ where
-\begin{equation}
+
+$$
     \mu = \frac{r - \delta - \frac{1}{2} \sigma^2}{\sigma}
     \quad \text{and} \quad
     a = \frac{\log s - \log K}{\sigma}.
-\end{equation}
+$$
+
 In other words, $\tau$ is the first time a Wiener process with drift $\mu$ hits the level $a$.
 
 The [density of the first time a Wiener process with drift $\mu$ hits the level $a$](https://math.stackexchange.com/questions/1053294/density-of-first-hitting-time-of-brownian-motion-with-drift) is well-known:
-\begin{equation}
+
+$$
     f(t) = \frac{\left| a \right|}{\sqrt{2 \pi t^3}} \exp \biggl( -\frac{\left( a - \mu t \right)^2}{2t} \biggr).
-\end{equation}
+$$
+
 Let $T \leq \infty$ be the expiry time of the option.
 The fair price of either instrument (in the nontrivial case) is
-\begin{equation}
+
+$$
     \mathbb{E} e^{-r \tau} \chi_{[0, T]}(\tau)
     = \int_0^T e^{-r t} f(t) dt.
-\end{equation}
+$$
+
 where $\chi_A$ is the [indicator function](https://en.wikipedia.org/wiki/Indicator_function) on a set $A$.
 The notation above reveals that this is none other than the [Laplace transform](https://en.wikipedia.org/wiki/Laplace_transform) of $f \cdot \chi_{[0, T]}$ evaluated at $r$.
 
@@ -62,14 +71,15 @@ $\mu^2 + 2r$ is nonnegative.
 
 *Proof*.
 If $r$ is nonnegative, the result is trivial.
-If $r$ is negative, then since $\delta \geq 0$,
-\begin{equation}
+If $r$ is negative, then since $\delta$ is nonnegative,
+
+$$
     \left( \mu^2 + 2r \right) \sigma^2
     \geq \left(r - \frac{1}{2} \sigma^2 \right)^2 + 2r \sigma^2
     = r^2 + r \sigma^2 + \frac{1}{4} \sigma^4
     = \left(r + \frac{1}{2} \sigma^2 \right)^2
     \geq 0.
-\end{equation}
+$$
 
 ## Laplace transform
 
@@ -80,7 +90,8 @@ Below, we use $\operatorname{erf}(\cdot)$ and $\operatorname{sgn}(\cdot)$ to den
 **Theorem.**
 Let $b = \sqrt{\mu^2 + 2r}$ and $0 < T < \infty$.
 If $b$ is real, then
-\begin{equation}
+
+$$
     \mathbb{E} e^{-r \tau} \chi_{[0, T]}(\tau)
     = \frac{1}{2} e^{a (\mu - b)} \left(
         1
@@ -90,20 +101,24 @@ If $b$ is real, then
             - \operatorname{sgn}(a) \operatorname{erf}\biggl(\frac{bT + a}{\sqrt{2T}}\biggr)
         \right)
     \right)
-\end{equation}
+$$
 
 *Proof*.
 Denote by $F(T)$ the expression on the right-hand side of the above equation.
 Noting that
-\begin{equation}
+
+$$
     \lim_{T \downarrow 0} \operatorname{erf} \biggl( \frac{bT \pm a}{\sqrt{2T}} \biggr)
     = \pm \operatorname{sgn}(a),
-\end{equation}
+$$
+
 it follows that $\lim_{T \downarrow 0} F(T) = 0$.
 If we can establish $F^\prime(t) = e^{-r t} f(t)$ for all $0 < t < \infty$, then by the [fundamental theorem of calculus](https://en.wikipedia.org/wiki/Fundamental_theorem_of_calculus),
-\begin{equation}
+
+$$
     F(T) = F(T) - \lim_{T \downarrow 0} F(T) = \int_0^T e^{-r t} f(t) dt,
-\end{equation}
+$$
+
 as desired.
 This is accomplished with SageMath below:
 
@@ -171,6 +186,6 @@ def american_binary(asset_price,
 
 
     
-![png](/assets/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_22_0.png)
+![png](/assets/posts/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_22_0.png)
     
 

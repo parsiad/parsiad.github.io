@@ -34,10 +34,10 @@ The [Kronecker delta](https://en.wikipedia.org/wiki/Kronecker_delta) $\delta_{jj
 ### Roots of unity
 
 **Definition (Roots of unity).**
-*A complex number $z$ satisfying $z^n = 1$ is called an $n$-th root of unity.*
+A complex number $z$ satisfying $z^n = 1$ is called an $n$-th root of unity.
 
 **Lemma.**
-*If $z$ is an $n$-th root of unity, so too is $z^u$ for any complex number $u$.*
+If $z$ is an $n$-th root of unity, so too is $z^u$ for any complex number $u$.
 
 *Proof*.
 $z^u = (z^u)^n = z^{nu} = (z^n)^u = 1^u = 1.$
@@ -52,8 +52,8 @@ It's readily verified by direct computation that $\omega^0, \ldots, \omega^{n - 
 Uniqueness follows from the [fundamental theorem of algebra](https://en.wikipedia.org/wiki/Fundamental_theorem_of_algebra) applied to $z^n - 1$.
 
 **Lemma.**
-*Let $n$ be a positive integer and $z \neq 1$ be an $n$-th root of unity.
-Then $z^0 + \cdots + z^{n - 1} = 0$.*
+Let $n$ be a positive integer and $z \neq 1$ be an $n$-th root of unity.
+Then $z^0 + \cdots + z^{n - 1} = 0$.
 
 *Proof*.
 The sum is a (finite) geometric series and hence $(1 - z) (z^0 + \cdots + z^{n - 1}) = 1 - z^n$, from which the desired result follows.
@@ -61,21 +61,25 @@ The sum is a (finite) geometric series and hence $(1 - z) (z^0 + \cdots + z^{n -
 ### Forward and inverse transforms
 
 **Theorem.**
-*Let
-\begin{equation}
+Let
+
+$$
     \boldsymbol{f}^{(j)}
     = \frac{1}{\sqrt{n}} ( \omega^0, \omega^j, \omega^{2j}, \ldots, \omega^{(n - 1)j} ).
-\end{equation}
-Then, the vectors $\boldsymbol{f}^{(0)}, \ldots, \boldsymbol{f}^{(n - 1)}$* form an orthonormal basis for $\mathbb{C}^n$.
+$$
+
+Then, the vectors $\boldsymbol{f}^{(0)}, \ldots, \boldsymbol{f}^{(n - 1)}$ form an orthonormal basis for $\mathbb{C}^n$.
 
 *Proof*.
 Let $j$ and $j^\prime$ be nonnegative integers strictly smaller than $n$.
 By the previous lemma,
-\begin{equation}
+
+$$
       n \left \langle \boldsymbol{f}^{(j)}, \boldsymbol{f}^{(j^\prime)} \right \rangle
     = \omega^{(j - j^\prime) \cdot 0} + \cdots + \omega^{(j - j^\prime) \cdot (n - 1)}
     = n \delta_{jj^\prime}
-\end{equation}
+$$
+
 as desired.
 
 The above establishes that the matrix $F$ whose rows are $\boldsymbol{f}^{(0)}, \ldots, \boldsymbol{f}^{(n - 1)}$ is [unitary](https://en.wikipedia.org/wiki/Unitary_matrix).
@@ -94,14 +98,14 @@ That is, $\boldsymbol{Z} = F \boldsymbol{z}$.
 ### Some immediate results
 
 **Theroem (Plancherel theorem).**
-*Let $\boldsymbol{u}$ and $\boldsymbol{v}$ be vectors.
-Then, $\langle \boldsymbol{u}, \boldsymbol{v} \rangle = \langle \boldsymbol{U}, \boldsymbol{V} \rangle$.*
+Let $\boldsymbol{u}$ and $\boldsymbol{v}$ be vectors.
+Then, $\langle \boldsymbol{u}, \boldsymbol{v} \rangle = \langle \boldsymbol{U}, \boldsymbol{V} \rangle$.
 
 *Proof*.
 $\langle \boldsymbol{U}, \boldsymbol{V} \rangle = \langle F \boldsymbol{v}, F \boldsymbol{v} \rangle = \boldsymbol{v}^{\mathrm{H}} F^{\mathrm{H}} F \boldsymbol{u} = \boldsymbol{v}^{\mathrm{H}} \boldsymbol{u} = \langle \boldsymbol{u}, \boldsymbol{v} \rangle$.
 
 **Corollary (Parseval's theorem).**
-*Let $\boldsymbol{u}$ be a vector. Then, $|\boldsymbol{u}| = |\boldsymbol{U}|$.*
+Let $\boldsymbol{u}$ be a vector. Then, $|\boldsymbol{u}| = |\boldsymbol{U}|$.
 
 The above result simply states that the original vector and its transform have the same Euclidean norm.
 
@@ -111,7 +115,7 @@ For integers $a$ and $b$ with $b$ nonnegative, denote $a \% b$ the least nonnega
 For a vector $\boldsymbol{u}$ with $n$ entries, we introduce the indexing convention $z_j = z_{j \% n}$ whenever $j$ is negative or at least as large $n$.
 
 **Definition (Circular convolution).**
-*The circular convolution of vectors $\boldsymbol{u}$ and $\boldsymbol{v}$ is a vector $\boldsymbol{u} \star \boldsymbol{v}$ with entries $(\boldsymbol{u} \star \boldsymbol{v})_j = u_0 v_{j - 0} + \cdots + u_{n - 1} v_{j - (n - 1)}$.*
+The circular convolution of vectors $\boldsymbol{u}$ and $\boldsymbol{v}$ is a vector $\boldsymbol{u} \star \boldsymbol{v}$ with entries $(\boldsymbol{u} \star \boldsymbol{v})_j = u_0 v_{j - 0} + \cdots + u_{n - 1} v_{j - (n - 1)}$.
 
 Denote by $\odot$ the [element-wise product](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)).
 
@@ -133,8 +137,8 @@ In practice, the input to the forward transform is often a real signal (i.e., a 
 It is useful to derive some facts about such signals.
 
 **Theorem (Conjugate symmetry).**
-*Let $\boldsymbol{x}$ be a vector in $\mathbb{R}^n$.
-Then, $X_j^\dagger = X_{n - j}$.*
+Let $\boldsymbol{x}$ be a vector in $\mathbb{R}^n$.
+Then, $X_j^\dagger = X_{n - j}$.
 
 *Proof*.
 First, note that
@@ -150,9 +154,9 @@ But what if we only have access to a "black box" function that computes the forw
 Can we still save on computation? The answer is provided by the corollary below.
 
 **Corollary.**
-*Let $\boldsymbol{x}$ and $\boldsymbol{y}$ be two vectors in $\mathbb{R}^n$.
+Let $\boldsymbol{x}$ and $\boldsymbol{y}$ be two vectors in $\mathbb{R}^n$.
 Let $\boldsymbol{z} = \boldsymbol{x} + i\boldsymbol{y}$.
-Then, $2 X_j = Z_j + Z_{n - j}^\dagger$ and $2 i Y_j = Z_j - Z_{n - j}^\dagger$.*
+Then, $2 X_j = Z_j + Z_{n - j}^\dagger$ and $2 i Y_j = Z_j - Z_{n - j}^\dagger$.
 
 In other words, the DFT of two real inputs $\boldsymbol{x}$ and $\boldsymbol{y}$ can be computed by
 
@@ -195,11 +199,13 @@ It re-expresses the DFT of an arbitrary composite size $n = ab$ in terms of smal
 
 Assuming $n$ is even, the radix-2 algorithm corresponds to taking $a = b = n /2$.
 The motivation comes from notating that
-\begin{equation}
+
+$$
     \sqrt{n}X_{k}
     =\sum_{j=0}^{n-1}\omega^{jk}x_{j}
     =\sum_{j=0}^{n/2-1}\omega^{2jk}x_{2j}+\omega^{k}\sum_{j=0}^{n/2-1}\omega^{2jk}x_{2j+1}
-\end{equation}
+$$
+
 and hence $X_k = E_k + \omega^k O_k$ where $\boldsymbol{E}$ and $\boldsymbol{O}$ are DFTs of the even and odd parts of the original signal $\boldsymbol{x}$.
 By expressing this relationship recursively, we obtain a natural $O(n \lg n)$ algorithm to compute the DFT.
 
@@ -285,7 +291,7 @@ image
 
 
     
-![png](/assets/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_54_0.png)
+![png](/assets/posts/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_54_0.png)
     
 
 
@@ -299,7 +305,7 @@ lossy_image
 
 
     
-![png](/assets/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_55_0.png)
+![png](/assets/posts/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_55_0.png)
     
 
 

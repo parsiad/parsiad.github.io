@@ -6,9 +6,10 @@ title: Softmax sensitivity to temperature
 ## Review
 
 The [softmax function](https://en.wikipedia.org/wiki/Softmax_function) is a way to transform a vector of real numbers $r$ into a probability vector $\sigma(r)$ while preserving the monotonicity of the coordinates:
-\begin{equation}
+
+$$
 \sigma(r)_i \equiv \frac{\exp(r_i)}{\sum_j \exp(r_j)}.
-\end{equation}
+$$
 
 
 ```python
@@ -30,9 +31,11 @@ An application of the softmax is in training [neural](https://en.wikipedia.org/w
 In this case, we have a neural network $x \mapsto f(x)$ which transforms a feature vector $x$ into a real-valued vector $f(x)$ with one coordinate for each of the $k$ classes.
 The predicted class is the coordinate of $f(x)$ with the maximum value.
 Training such a network is typically achieved by minimizing the [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy):
-\begin{equation}
+
+$$
 \sum_{(x, i)} -\log \sigma(f(x))_i
-\end{equation}
+$$
+
 where the sum is taken over feature-class pairs $(x, i)$ in the training set.
 
 ## Temperature
@@ -84,9 +87,11 @@ softmax(r * 10.0)
 
 
 In general, we define
-\begin{equation}
+
+$$
 \sigma_T(r) \equiv \sigma(r / T)
-\end{equation}
+$$
+
 as the *softmax with temperature $T$*.
 Here, $T$ is a scalar that, just as above, controls the clustering of probabilities.
 
@@ -94,7 +99,7 @@ This behavior is more clearly demonstrated in the plot below, where the softmax 
 
 
     
-![png](/assets/2022-11-14-softmax_sensitivity_to_temperature_files/2022-11-14-softmax_sensitivity_to_temperature_14_0.png)
+![png](/assets/posts/2022-11-14-softmax_sensitivity_to_temperature_files/2022-11-14-softmax_sensitivity_to_temperature_14_0.png)
     
 
 
@@ -103,7 +108,7 @@ However, when there is no single largest coordinate, the limiting behavior is to
 
 
     
-![png](/assets/2022-11-14-softmax_sensitivity_to_temperature_files/2022-11-14-softmax_sensitivity_to_temperature_16_0.png)
+![png](/assets/posts/2022-11-14-softmax_sensitivity_to_temperature_files/2022-11-14-softmax_sensitivity_to_temperature_16_0.png)
     
 
 
@@ -115,19 +120,22 @@ Let $e = (1, \ldots, 1)^\intercal$ be the ones vector.
 Let $r$ be a vector in $\mathbb{R}^k$.
 Let $m_i$ be equal to one if $r_i = \max_j r_j$ and zero otherwise.
 Then,
-\begin{equation}
+
+$$
 \sigma_0(r) = \frac{m}{e^\intercal m}
-\end{equation}
+$$
 
 *Proof*.
 Let $\overline{r} \equiv \max_j r_j$.
 Fix $i$.
 If $r_i < \overline{r}$, then
-\begin{equation}
+
+$$
 \sigma_{T}(r)_i
 \leq \frac{\exp(r_i / T)}{\exp(\overline{r} / T)}
 = \exp((r_i - \overline{r}) / T)
-\end{equation}
+$$
+
 which tends to zero as $T$ vanishes.
 Therefore, the only nonzero coordinates $i$ of $\sigma_0(r)$ are those satisfying $r_i = \overline{r}$.
 Since all such coordinates must be equal, the desired result follows from the fact that $\sigma_0(r)$ is a probability vector.
@@ -135,9 +143,10 @@ Since all such coordinates must be equal, the desired result follows from the fa
 **Proposition.**
 Let $r$ be a vector in $\mathbb{R}^k$.
 Then,
-\begin{equation}
+
+$$
 \sigma_\infty(r) = \frac{e}{k}.
-\end{equation}
+$$
 
 *Proof*.
 This follows immediately from $\lim_{T \rightarrow \infty} \exp(r_i / T) = 1$.

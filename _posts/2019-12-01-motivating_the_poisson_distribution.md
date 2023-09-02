@@ -42,9 +42,10 @@ These assumptions can be neatly summarized in one sentence: the random variables
 The sum $S_n = X_1 + \cdots + X_n$ counts the total number of emails received in the work day.
 Being a sum of IID Bernoulli random variables, $S_n$ has binomial distribution with $n$ trials and success probability $p = \mathbb{P}(X_1 = 1)$.
 That is, $S_n$ has PMF
-\begin{equation}
+
+$$
   f_{n, p}(s) = \binom{n}{s} p^s \left( 1 - p \right)^{n-s}.
-\end{equation}
+$$
 
 The expected number of emails received under this model is $\mathbb{E} S_n = np$.
 We would like to pick $p$ such that the expected number of emails does not depend on the number of partitions $n$.
@@ -52,34 +53,38 @@ Our model would be a bit weird if the expected number of emails changed as a fun
 The only way to prevent this from happening is to pick $p = \lambda / n$ for some positive constant $\lambda$
 (technically, it's possible that $p = \lambda / n > 1$, but we can always pick $n$ sufficiently large to obtain a valid probability).
 Under this choice, the PMF becomes
-\begin{equation}
+
+$$
   f_{n,\lambda/n}(s)
   = \binom{n}{s}\left(\frac{\lambda}{n}\right)^{s}\left(1-\frac{\lambda}{n}\right)^{n-s}
   = \frac{\lambda^{s}}{s!}\frac{1}{n^{n}}\frac{n!}{\left(n-s\right)!}\left(n-\lambda\right)^{n-s}.
-\end{equation}
+$$
 
 Next, note that
-\begin{equation}
+
+$$
   \frac{1}{n^{n}}\frac{n!}{\left(n-s\right)!}\left(n-\lambda\right)^{n-s}
   = \frac{1}{n^{n}}\frac{n!}{\left(n-s\right)!}\sum_{k=0}^{n-s}\binom{n-s}{k}\left(-\lambda\right)^{k}n^{n-s-k}
   = \sum_{k=0}^{n-s}\frac{\left(-\lambda\right)^{k}}{k!}\frac{n\left(n-1\right)\cdots\left(n-s-k+1\right)}{n^{s+k}}.
-\end{equation}
+$$
+
 As we increase the number of partitions, our model becomes more and more realistic.
 By taking a limit as the number of partitions goes to infinity, we obtain a model in which emails can be received at any point in time.
 We make a new PMF $g_\lambda$ by taking this limit:
-\begin{equation}
+
+$$
   g_\lambda(s)
   = \lim_{n}f_{n,\lambda/n}(s)
   = \frac{\lambda^s}{s!} \sum_{k \geq 0} \frac{\left(-\lambda\right)^k}{k!}
   = \frac{\lambda^{s}}{s!}e^{-\lambda}.
-\end{equation}
+$$
 
 The figure below plots $g_\lambda$ as a function of $s$.
 When $\lambda$ is a positive integer, the modes are $\lambda$ and $\lambda - 1$, as can be seen in the plot.
 
 
     
-![png](/assets/2019-12-01-motivating_the_poisson_distribution_files/2019-12-01-motivating_the_poisson_distribution_16_0.png)
+![png](/assets/posts/2019-12-01-motivating_the_poisson_distribution_files/2019-12-01-motivating_the_poisson_distribution_16_0.png)
     
 
 
@@ -94,8 +99,8 @@ In summary, any random variable with PMF $g_\lambda$ (for some positive value of
 All of our hard work above is not only a construction of the Poisson distribution but also a proof of the following result:
 
 **Proposition (Binomial to Poisson).**
-*Let $\lambda$ be a positive number.
-The binomial distribution with $n$ trials and success probability $p = \lambda / n$ [converges](https://en.wikipedia.org/wiki/Convergence_of_random_variables#Convergence_in_distribution), as $n \rightarrow \infty$, to the Poisson distribution with parameter $\lambda$.*
+Let $\lambda$ be a positive number.
+The binomial distribution with $n$ trials and success probability $p = \lambda / n$ [converges](https://en.wikipedia.org/wiki/Convergence_of_random_variables#Convergence_in_distribution), as $n \rightarrow \infty$, to the Poisson distribution with parameter $\lambda$.
 
 ## The usual rigmarole
 
@@ -106,27 +111,32 @@ We establish the proposition by showing that the [characteristic function](https
 
 *Proof (Binomial to Poisson)*.
 Let's start by computing the CF of the Poisson distribution:
-\begin{equation}
+
+$$
     \varphi_{\mathrm{Poisson}(\lambda)}(t)
     = e^{-\lambda}\sum_{k\geq0}\frac{1}{k!}\left(\lambda e^{it}\right)^{k}
     = e^{-\lambda}\exp\left(\lambda e^{it}\right)
     = \exp\left(\lambda \left(e^{it} - 1\right)\right).
-\end{equation}
+$$
+
 Let's now compute the CF of the binomial distribution with $n$ trials and success probability $p$.
 The CF can be obtained by applying the [binomial theorem](https://en.wikipedia.org/wiki/Binomial_theorem):
-\begin{equation}
+
+$$
     \varphi_{\mathrm{Binomial}(n, p)}(t)
     = \sum_{k\geq0}e^{itk}\binom{n}{k}p^{k}\left(1-p\right)^{n-k}
     = \sum_{k\geq0}\binom{n}{k}\left(pe^{it}\right)^{k}\left(1-p\right)^{n-k}\\
     = \left(1-p+pe^{it}\right)^{n}
     = \left(1+p\left(e^{it}-1\right)\right)^{n}.
-\end{equation}
+$$
+
 Setting $p = \lambda / n$ and taking limits in the above, we obtain the desired result:
-\begin{equation}
+
+$$
   \lim_n \varphi_{\mathrm{Binomial}(n, \lambda / n)}(t)
   = \lim_n \left(
     \exp \left( \frac{\lambda}{n} \left( e^{it} - 1 \right) \right)
     + O \left( \frac{1}{n^2} \right)
   \right)^n
   = \varphi_{\mathrm{Poisson}(\lambda)}(t).
-\end{equation}
+$$

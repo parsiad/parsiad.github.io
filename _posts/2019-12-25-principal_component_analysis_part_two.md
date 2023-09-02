@@ -24,13 +24,17 @@ In ordinary least squares (OLS), we want to find a line of best fit between the 
 
 Denoting by $X$ the matrix whose rows are the points and $y$ the vector whose entries are the labels, the intercept $\alpha$ and slope (a.k.a. gradient) $\beta$ are obtained by minimizing $\Vert \alpha + X \beta - y \Vert$.
 Some [matrix calculus](https://en.wikipedia.org/wiki/Matrix_calculus) reveals that the minimum is obtained at the values of $\alpha$ and $\beta$ for which
-\begin{equation}
+
+$$
     N \alpha = y^\intercal e - \beta^\intercal X^\intercal e
-\end{equation}
+$$
+
 and
-\begin{equation}
+
+$$
     X^\intercal X \beta = X^\intercal y - \alpha X^\intercal e
-\end{equation}
+$$
+
 where $e$ is the vector of all ones.
 
 ## Principal components regression
@@ -44,13 +48,16 @@ In more detail, we
 4. perform OLS to find a line of best fit between the transformed points and $y$.
 
 By the previous section, we know that the minimum is obtained at the values of the intercept $\alpha_k$ and gradient $\beta_k$ for which
-\begin{equation}
+
+$$
     N \alpha_k = y^\intercal e - \beta_k^\intercal Z_k^\intercal e
-\end{equation}
+$$
+
 and
-\begin{equation}
+
+$$
     Z_k^\intercal Z_k \beta_k = Z_k^\intercal y - \alpha_k Z_k^\intercal e
-\end{equation}
+$$
 
 Once we have solved these equations for $\alpha_k$ and $\beta_k$, we can predict the label $\hat{y}$ corresponding to a new sample $x$ as $\hat{y} = \alpha_k + x^\intercal V_k \beta_k$.
 
@@ -65,12 +72,14 @@ As such, the system can be solved efficiently.
 Let $v_j$ denote the $j$-th column of $V_k$.
 Since $v_j$ is a principal component of $X$, it is also an eigenvector of $X^\intercal X$ with eigenvalue $\sigma_j^2$, the square of the $j$-th singular value.
 Therefore, the $(i, j)$-th entry of $Z_k^\intercal Z_k$ is
-\begin{equation}
+
+$$
     (X v_i)^\intercal (X v_j)
     = v_i^\intercal X^\intercal X v_j
     = \sigma_j^2 v_i^\intercal v_j
     = \sigma_j^2 \delta_{ij}.
-\end{equation}
+$$
+
 where $\delta_{ij}$ is the [Kronecker delta](https://en.wikipedia.org/wiki/Kronecker_delta).
 
 ## The California housing dataset
@@ -191,7 +200,7 @@ rmses_test = rmses(model, X_test, y_test)
 
 
     
-![png](/assets/2019-12-25-principal_component_analysis_part_two_files/2019-12-25-principal_component_analysis_part_two_26_0.png)
+![png](/assets/posts/2019-12-25-principal_component_analysis_part_two_files/2019-12-25-principal_component_analysis_part_two_26_0.png)
     
 
 
