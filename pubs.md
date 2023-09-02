@@ -1,5 +1,4 @@
 ---
-layout: page
 permalink: /pubs
 redirect_from:
   - /selected-publications

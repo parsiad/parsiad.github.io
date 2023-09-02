@@ -1,8 +1,8 @@
 ---
-layout: page
 permalink: /
 redirect_from:
   - /about
+  - /contact
 title: About
 ---
 
@@ -14,6 +14,8 @@ Prior to that, I was a Research Post-Doctoral Assistant Professor in the [Depart
 
 I hold a PhD from the [David R. Cheriton School of Computer Science](https://cs.uwaterloo.ca/) at the University of Waterloo, completed under the supervision of Professor [George Labahn](https://cs.uwaterloo.ca/~glabahn/).
 My academic work focused on both the theory and numerics of continuous-time optimal stochastic control and viscosity solutions ([this monograph](http://dx.doi.org/10.1007/978-1-4614-4286-8) gives a good introduction to the theory).
+
+You can reach me at `{{ site.hidden_email }}`
 
 A CV is available on request.
 
@@ -28,4 +30,4 @@ My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G.
 For fun, I wrote a short [script to generate an academic genealogy graph](https://github.com/parsiad/math-genealogy-graph) using data from the [Mathematics Genealogy Project](https://www.mathgenealogy.org/).
 Mine is below.
 
-[![alt text](https://parsiad.ca/math_genealogy.svg)](https://parsiad.ca/math_genealogy.svg)
+<a href="/assets/images/math_genealogy.svg"><img src="/assets/images/math_genealogy.svg" width="100%"></a>

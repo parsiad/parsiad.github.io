@@ -1,5 +1,4 @@
 ---
-layout: page
 permalink: /sols
 redirect_from:
   - /blog/2020/all-of-statistics-chapter-01/

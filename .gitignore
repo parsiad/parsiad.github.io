@@ -1,4 +1,5 @@
 _site
+.bundle
 .ipynb_checkpoints
 .DS_Store
 .sass-cache

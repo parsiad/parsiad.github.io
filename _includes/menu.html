@@ -1,7 +1,7 @@
 {% assign menu = site.data.menu %}
 
 {% if menu %}
-  <nav class="site-navigation" role="navigation">
+  <nav>
     <ul>
     {% for item in site.data.menu %}
       <li {% if page.url == item.url %}class="active"{% endif %}>
