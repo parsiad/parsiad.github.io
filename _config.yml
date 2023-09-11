@@ -4,7 +4,7 @@ disqus:
   shortname: parsiad
 email: parsiad.azimzadeh@gmail.com
 google_analytics: "G-97ZGWZFX7F"
-hidden_email: MY_LAST_NAME.MY_FIRST_NAME@gmail.com
+hidden_email: MY_FIRST_NAME.MY_LAST_NAME@gmail.com
 markdown: kramdown
 permalink: /blog/:year/:title/
 plugins:
