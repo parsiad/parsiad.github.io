@@ -11,7 +11,7 @@ all: $(MD_FILES) $(CONTENT_DIRS)
 $(OUTPUT_DIR)/%.md $(ASSETS_DIR)/%_files &: %.ipynb
 	rm -fr $(OUTPUT_DIR)/$(basename $<).md $(ASSETS_DIR)/$(basename $<)_files
 	mkdir -p $(OUTPUT_DIR)/$(basename $<)_files
-	jupyter nbconvert --to markdown --output-dir=$(OUTPUT_DIR) --TagRemovePreprocessor.remove_cell_tags no_cell --TagRemovePreprocessor.remove_input_tags no_input $<
+	jupyter nbconvert --to markdown --output-dir=$(OUTPUT_DIR) --TagRemovePreprocessor.remove_cell_tags no_cell --TagRemovePreprocessor.remove_input_tags no_input --TagRemovePreprocessor.remove_all_outputs_tags no_output $<
 	# Replace instances of ![png]( with ![png](/assets/posts/
 	sed -i 's/^!\[png\](/!\[png\](\/assets\/posts\//g' $(OUTPUT_DIR)/$(basename $<).md
 	# Replace { with \\{
