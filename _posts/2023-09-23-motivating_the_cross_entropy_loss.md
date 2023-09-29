@@ -56,7 +56,7 @@ $$
 The [Karush--Kuhn--Tucker stationarity condition](https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions) is
 
 $$
--\frac{p(j)}{q(j)}+\lambda=0.
+-\frac{p(k)}{q(k)}+\lambda=0\text{ for }k=1,\ldots,K.
 $$
 
 In other words, the MLE $\hat{q}$ is a multiple of $p$.
