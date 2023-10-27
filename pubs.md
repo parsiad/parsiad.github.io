@@ -7,7 +7,7 @@ title: Selected Publications
 
 This list includes publications from my days in academia.
 
-**Anything older than 2016 is excluded**. For a more complete list, I refer you to [my Google Scholar page](https://scholar.google.ca/citations?hl=en&user=PGB51pwAAAAJ&view_op=list_works&sortby=pubdate).
+**Anything older than 2015 is excluded**. For a more complete list, I refer you to [my Google Scholar page](https://scholar.google.ca/citations?hl=en&user=PGB51pwAAAAJ&view_op=list_works&sortby=pubdate).
 You may also find [my MathSciNet page](http://www.ams.org/mathscinet/search/publications.html?pg1=INDI&s1=1097701) useful.
 Most of the documents below have open access links to preprints that can alternatively be found by [searching for me on the arXiv](https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term=Parsiad+Azimzadeh&terms-0-field=author&classification-mathematics=y&classification-physics_archives=all&date-filter_by=all_dates&date-year=&date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=50&order=-announced_date_first).
 
@@ -20,6 +20,7 @@ Most of the documents below have open access links to preprints that can alterna
 * P. Azimzadeh, E. Bayraktar, G. Labahn, ["Convergence of implicit schemes for Hamilton-Jacobi-Bellman quasi-variational inequalities"](https://doi.org/10.1137/18M1171965), In *SIAM J. Control and Optim.*, vol. 56, no. 6, pp. 3994–4016, 2018. [\[arXiv\]](https://arxiv.org/abs/1705.02922) [\[pdf\]](https://arxiv.org/pdf/1705.02922.pdf) [\[doi\]](https://doi.org/10.1137/18M1171965)
 * P. Azimzadeh, P. A. Forsyth, ["Weakly chained matrices, policy iteration, and impulse control"](https://doi.org/10.1137/15M1043431), In *SIAM J. Numer. Anal.*, vol. 54, no. 3, pp. 1341–1364, 2016. [\[arXiv\]](https://arxiv.org/abs/1510.03928) [\[pdf\]](https://arxiv.org/pdf/1510.03928.pdf) [\[doi\]](https://doi.org/10.1137/15M1043431)
 * P. Azimzadeh, T. Carpenter, ["Fast Engset computation"](https://doi.org/10.1016/j.orl.2016.02.011), In *Oper. Res. Lett.*, vol. 44, no. 3, pp. 313–318, 2016. [\[arXiv\]](https://arxiv.org/abs/1511.00291) [\[pdf\]](https://arxiv.org/pdf/1511.00291.pdf) [\[pypi\]](https://pypi.python.org/pypi/fast-engset/) [\[github\]](https://github.com/parsiad/fast-engset/releases) [\[doi\]](https://doi.org/10.1016/j.orl.2016.02.011)
+* P. Azimzadeh, P. A. Forsyth, ["The existence of optimal bang-bang controls for GMxB contracts"](https://doi.org/10.1137/140953885), In SIAM J. Financial Math., vol. 6, no. 1, pp. 117-139, 2015. [\[arXiv\]](https://arxiv.org/abs/1502.05743) [\[pdf\]](https://arxiv.org/pdf/1502.05743.pdf) [\[doi\]](https://doi.org/10.1137/140953885)
 
 ## PhD Thesis
 
