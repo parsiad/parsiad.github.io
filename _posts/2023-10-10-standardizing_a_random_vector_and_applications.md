@@ -97,6 +97,8 @@ Its inverse is
 $$
 L^{-1}=\begin{pmatrix}1 & 0\\
 -\frac{\rho}{\sqrt{1-\rho^{2}}} & \frac{1}{\sqrt{1-\rho^{2}}}
+\end{pmatrix}\begin{pmatrix}\frac{1}{\sigma_{1}}\\
+ & \frac{1}{\sigma_{2}}
 \end{pmatrix}.
 $$
 
