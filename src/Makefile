@@ -14,6 +14,8 @@ $(OUTPUT_DIR)/%.md $(ASSETS_DIR)/%_files &: %.ipynb
 	jupyter nbconvert --to markdown --output-dir=$(OUTPUT_DIR) --TagRemovePreprocessor.remove_cell_tags no_cell --TagRemovePreprocessor.remove_input_tags no_input --TagRemovePreprocessor.remove_all_outputs_tags no_output $<
 	# Replace instances of ![png]( with ![png](/assets/posts/
 	sed -i 's/^!\[png\](/!\[png\](\/assets\/posts\//g' $(OUTPUT_DIR)/$(basename $<).md
+	# Replace instances of ![svg]( with ![svg](/assets/posts/
+	sed -i 's/^!\[svg\](/!\[svg\](\/assets\/posts\//g' $(OUTPUT_DIR)/$(basename $<).md
 	# Replace { with \\{
 	# sed -i 's/\\{/\\\\{/g' $(OUTPUT_DIR)/$(basename $<).md
 	# Replace } with \\}
