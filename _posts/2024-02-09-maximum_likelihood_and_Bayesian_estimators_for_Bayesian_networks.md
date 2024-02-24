@@ -207,7 +207,7 @@ EM is a [fixed point iteration](https://en.wikipedia.org/wiki/Fixed-point_iterat
 
 $$
 T\theta \equiv \operatorname{argsup}_{\theta^\prime} \mathbb{E}_\theta \left[
-    \log f_\theta(\boldsymbol{Y}, \boldsymbol{Z}) \mid \boldsymbol{Y} = \boldsymbol{y}
+    \log f_{\theta^\prime}(\boldsymbol{Y}, \boldsymbol{Z}) \mid \boldsymbol{Y} = \boldsymbol{y}
 \right].
 $$
 
