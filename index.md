@@ -6,8 +6,7 @@ redirect_from:
 title: About
 ---
 
-<!-- <img id="avatar" src="https://en.gravatar.com/userimage/5251842/38ee44b1b6e3189379bf9abdaf22e88b.jpg?size=200"> -->
-<img id="avatar" src="https://gravatar.com/userimage/5251842/e4b9421c266e5410e941924cdbaa147c.jpeg?size=200">
+<img id="avatar" src="https://2.gravatar.com/avatar/e68eee66a27d99a1e78b5663e62f4a29a5657f7bb8fbc5e15ff827e52f26ff00?size=200">
 
 I am a VP at [PDT Partners](https://pdtpartners.com), a fund in New York City.
 Previously, I worked at [Google LLC](http://google.com) in Mountain View, California.
