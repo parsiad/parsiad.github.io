@@ -7,6 +7,11 @@ title: Closed-form expressions for perpetual and finite-maturity American binary
 ---
 In this article, we derive the price of an American binary (a.k.a. digital) call and put options assuming that the underlying asset follows geometric Brownian motion. We handle the case in which a finite expiry time is specified for the option. We obtain results for the corresponding perpetual (i.e., no expiry) options by taking limits.
 
+**Updated August 10, 2024.**
+A previous version of this article defined the symbol $a$ (see below) erroneously.
+Namely, it was defined as the negation of the quantity that now appears in the corrected article.
+Thanks to Grant Garrison for catching this error.
+
 ## American binary option
 
 A binary option is a type of option in which pays off either some fixed amount (e.g., one dollar) or nothing at all.
@@ -36,7 +41,7 @@ Let $\tau$ be the first time the asset hits level $K$.
 It follows that, for each realization, $\tau$ is either infinite or satisfies
 
 $$
-    \log s + \left( r - \delta - \frac{1}{2} \sigma^2 \right) \tau + \sigma W_\tau = \log K.
+    \log x + \left( r - \delta - \frac{1}{2} \sigma^2 \right) \tau + \sigma W_\tau = \log K.
 $$
 
 We can rewrite the above equation as $\mu \tau + W_\tau = a$ where
@@ -44,7 +49,7 @@ We can rewrite the above equation as $\mu \tau + W_\tau = a$ where
 $$
     \mu = \frac{r - \delta - \frac{1}{2} \sigma^2}{\sigma}
     \quad \text{and} \quad
-    a = \frac{\log s - \log K}{\sigma}.
+    a = \frac{\log K - \log x}{\sigma}.
 $$
 
 In other words, $\tau$ is the first time a Wiener process with drift $\mu$ hits the level $a$.
@@ -176,7 +181,7 @@ def american_binary(asset_price,
     """
     r = risk_free_rate
     T = expiry_time
-    a = np.log(asset_price / strike) / volatility
+    a = np.log(strike / asset_price) / volatility
     μ = (r - dividend_rate - 0.5 * volatility**2) / volatility
     b = np.sqrt(μ**2 + 2. * r)
     return 0.5 * np.exp(a * (μ - b)) * (
@@ -186,6 +191,6 @@ def american_binary(asset_price,
 
 
     
-![png](/assets/posts/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_22_0.png)
+![png](/assets/posts/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_23_0.png)
     
 
