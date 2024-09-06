@@ -3,13 +3,35 @@ date: 2024-09-02 12:00:00-0500
 layout: post
 title: R squared and multiple regression
 ---
-## Motivation
+## Introduction and Results
 
 The *R squared* of a predictor $\hat{Y}$ relative to a target $Y$ is the proportion of the variation in the target that is explained by that predictor.
 In this short note, we introduce the R squared in its most general form.
 
-We then turn our attention to predictors constructed by ordinary least squares (OLS) with an intercept term and prove that in this case, on the training set, R squared is equal to the square of the correlation between the predictor and target.
-This fact is well-known but a proof outside of the case of a single independent variable (a.k.a. [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression)) is hard to find.
+We then turn our attention to the predictor $\hat{Y}_{\mathrm{ols}} = \hat{\beta}_0 + X^\intercal \hat{\beta}_1$ constructed by [ordinary least squares](https://en.wikipedia.org/wiki/Ordinary_least_squares) (OLS).
+In this case, we prove that the R squared satisfies
+
+$$
+\boxed{R^{2}(Y,\hat{Y}_{\mathrm{ols}})
+=\frac{\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}
+=\frac{\operatorname{Cov}(X,Y)^\intercal \hat{\beta}_1}{\operatorname{Var}(Y)}
+=\frac{\operatorname{Var}(\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}
+=\operatorname{Corr}(Y,\hat{Y}_{\mathrm{ols}})^{2}}
+$$
+
+where the covariance $\operatorname{Cov}(X, Y)$ is the vector whose entries are $\operatorname{Cov}(X_i, Y)$.
+
+In addition, when the covariance matrix $\operatorname{Cov}(X, X)$ is nonsingular, we can substitute the unique representation for $\hat{\beta}_1$ to get
+
+$$
+\boxed{R^{2}(Y,\hat{Y}_{\mathrm{ols}})
+=\frac{\operatorname{Cov}(X,Y)^\intercal\operatorname{Cov}(X,X)^{-1}\operatorname{Cov}(X,Y)}{\operatorname{Var}(Y)}.}
+$$
+
+In the case of a one dimensional $X$, the above is the [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) between $X$ and $Y$.
+
+These identities may be folklore in the following sense: I believe they are well-known but that a proof, outside of the one dimensional case, is hard to find.
+Note that in the one dimensional case, OLS (with the intercept term $\hat{\beta}_0$) is simply called [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression).
 
 ## R squared
 
@@ -67,6 +89,16 @@ $$
 $$
 
 *Remark*.
+We could have also defined $\hat{\beta}_0$ and $\hat{\beta}_1$ by the equivalent system
+
+$$
+\begin{align}
+\hat{\beta}_{0} & =\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}\nonumber \\
+\operatorname{Cov}(X, X)\hat{\beta}_{1} & =\operatorname{Cov}(X, Y).
+\end{align}
+$$
+
+*Remark*.
 Thus far, we have only used a single probability measure: that which is implied by the expectation $\mathbb{E}$.
 In data-driven applications, it is standard practice to fit the coefficients on a subset of data (also known as the [training set](https://en.wikipedia.org/wiki/Training,_validation,_and_test_data_sets#Training_data_set)) while "holding out" the remainder of the data (also known as the [test set](https://en.wikipedia.org/wiki/Training,_validation,_and_test_data_sets#Test_data_set)) to evaluate the quality of the fit.
 This results in two distinct expectations: $\mathbb{E}$ and $\mathbb{E}_H$ ($H$ for "hold out").
@@ -74,10 +106,10 @@ In the context of R squared, this results in two natural quantities: $R^2$ and $
 We stress that the results of this section apply only to the former.
 Put more succinctly, **on the test set, R squared is not guaranteed to be equal to the square of the correlation between the predictor and target** for the OLS predictor.
 
-To establish that on the training set, R squared is equal to the square of the correlation between the predictor and target for the OLS predictor, we first prove a series of smaller results:
+To establish that on the training set, R squared is equal to the square of the correlation between the predictor and target for the OLS predictor, we use a series of smaller results:
 
-**Lemma.**
-*The target and OLS predictor are equal in expectation.*
+**Lemma 1.**
+*The OLS predictor is unbiased.*
 
 *Proof*.
 Direct computation yields
@@ -86,77 +118,79 @@ $$
 \mathbb{E}\hat{Y}_{\mathrm{ols}}\equiv\hat{\beta}_{0}+\mathbb{E}X^{\intercal}\hat{\beta}_{1}=\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}+\mathbb{E}X^{\intercal}\hat{\beta}_{1}=\mathbb{E}Y.\blacksquare
 $$
 
-**Lemma.**
-*The second moment of the OLS predictor is equal to the mean of the product of the target and OLS predictor.
-Specifically,*
+**Lemma 2.**
+*The second moment of the OLS predictor satisfies*
 
 $$
 \mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]
 = \mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]
+= \left(\mathbb{E}Y\right)^2 + \operatorname{Cov}(X, Y)^\intercal \hat{\beta}_1.
 $$
 
 *Proof*.
-First, note that
+Direct computation along with the definitions of $\hat{\beta}_0$ and $\mathbb{E}[XX^{\intercal}]\hat{\beta}_1$ reveal
 
 $$
-Y\hat{Y}_{\mathrm{ols}}=Y\left(\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}+X^{\intercal}\hat{\beta}_{1}\right)
+\begin{align*}
+\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}] & =\mathbb{E}\left[Y\left(\hat{\beta}_{0}+X^{\intercal}\hat{\beta}_{1}\right)\right]\\
+ & =\mathbb{E}\left[Y\hat{\beta}_{0}+X^{\intercal}Y\hat{\beta}_{1}\right]\\
+ & =\mathbb{E}Y\hat{\beta}_{0}+\mathbb{E}[X^{\intercal}Y]\hat{\beta}_{1}\\
+ & =\mathbb{E}Y\left(\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}\right)+\mathbb{E}[X^{\intercal}Y]\hat{\beta}_{1}\\
+ & =\left(\mathbb{E}Y\right)^{2}-\mathbb{E}X^{\intercal}\mathbb{E}Y\hat{\beta}_{1}+\mathbb{E}[X^{\intercal}Y]\hat{\beta}_{1}
+\end{align*}
 $$
 
 and
 
 $$
-\hat{Y}_{\mathrm{ols}}^{2}=\hat{\beta}_{0}^{2}+2\hat{\beta}_{0}X^{\intercal}\hat{\beta}_{1}+\hat{\beta}_{1}^{\intercal}XX^{\intercal}\hat{\beta}_{1}.
+\begin{align*}
+\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}] & =\mathbb{E}\left[\left(\hat{\beta}_{0}+X^{\intercal}\hat{\beta}_{1}\right)^{2}\right]\\
+ & =\mathbb{E}\left[\hat{\beta}_{0}^{2}+2\hat{\beta}_{0}X^{\intercal}\hat{\beta}_{1}+\hat{\beta}_{1}^{\intercal}XX^{\intercal}\hat{\beta}_{1}\right]\\
+ & =\hat{\beta}_{0}^{2}+2\hat{\beta}_{0}\mathbb{E}X^{\intercal}\hat{\beta}_{1}+\hat{\beta}_{1}^{\intercal}\mathbb{E}[XX^{\intercal}]\hat{\beta}_{1}\\
+ & =\hat{\beta}_{0}^{2}+2\hat{\beta}_{0}\mathbb{E}X^{\intercal}\hat{\beta}_{1}+\left(\mathbb{E}[X^{\intercal}Y]-\hat{\beta}_{0}\mathbb{E}X^{\intercal}\right)\hat{\beta}_{1}\\
+ & =\left(\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}\right)^{2}+\left(\mathbb{E}Y-\mathbb{E}X^{\intercal}\hat{\beta}_{1}\right)\mathbb{E}X^{\intercal}\hat{\beta}_{1}+\mathbb{E}\left[X^{\intercal}Y\right]\hat{\beta}_{1}\\
+ & =\left(\mathbb{E}Y\right)^{2}-\mathbb{E}X^{\intercal}\mathbb{E}Y\hat{\beta}_{1}+\mathbb{E}[X^{\intercal}Y]\hat{\beta}_{1}
+\end{align*}
 $$
 
-Taking expectations of both expressions, we get
+as desired. $\blacksquare$
+
+**Corollary 3.**
+*The variance of the OLS predictor satisfies*
 
 $$
-\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]=\left(\mathbb{E}Y\right)^{2}+\left(\mathbb{E}[X^{\intercal}Y]-\mathbb{E}X^{\intercal}\mathbb{E}Y\right)\hat{\beta}_{1}=\left(\mathbb{E}Y\right)^{2}+\operatorname{Cov}(X,Y)^{\intercal}\hat{\beta}_{1}.
+\operatorname{Var}(\hat{Y}_{\mathrm{ols}})
+=\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}}).
 $$
-
-and
-
-$$
-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]=\hat{\beta}_{0}^{2}+2\hat{\beta}_{0}\mathbb{E}X^{\intercal}\hat{\beta}_{1}+\hat{\beta}_{1}^{\intercal}\mathbb{E}[XX^{\intercal}]\hat{\beta}_{1}.
-$$
-
-Substituting the expressions for $\hat{\beta}_0$ and $\mathbb{E}[XX^{\intercal}]\hat{\beta}_1$ in the definition of OLS into the above and simplifying yields the desired result. $\blacksquare$
-
-**Corollary.**
-*The covariance of the target and the OLS predictor is equal to the variance of the OLS predictor.*
 
 *Proof*.
-Applying the above lemmas,
+Applying Lemmas 1 and 2,
 
 $$
 \operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})=\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\mathbb{E}Y\mathbb{E}\hat{Y}_{\mathrm{ols}}=\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]-\left(\mathbb{E}\hat{Y}_{\mathrm{ols}}\right)^{2}=\operatorname{Var}(\hat{Y}_{\mathrm{ols}}).\blacksquare
 $$
 
-We are now ready to prove the main result:
-
-**Proposition.**
-*The R squared of the OLS predictor is the square of the correlation between the target and OLS predictor.
-Specifically,*
+**Corollary 4.**
+*The MSE of the OLS predictor can be decomposed as*
 
 $$
-\boxed{R^{2}(Y,\hat{Y}_{\mathrm{ols}})=\frac{\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}=\frac{\operatorname{Var}(\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}=\operatorname{Corr}(Y,\hat{Y}_{\mathrm{ols}})^{2}}
+\operatorname{MSE}(Y,\hat{Y}_{\mathrm{ols}})
+=\operatorname{Var}(Y)-\operatorname{Var}(\hat{Y}_{\mathrm{ols}}).
 $$
-
-*where $\operatorname{Corr}$ is the [Pearson correlation coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient).*
 
 *Proof*.
-The first equality follows from a direct application of the above lemmas:
+Applying Lemmas 1 and 2 and Corollary 3,
 
 $$
 \begin{align*}
-\operatorname{Var}(Y)R^{2}(Y,\hat{Y}_{\mathrm{ols}})
-& = \operatorname{Var}(Y)-\operatorname{MSE}(Y,\hat{Y}_{\mathrm{ols}}) \\
-& = 2\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\left(\mathbb{E}Y\right)^{2}-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]\\
-& = \operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})+\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]=\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}}).
+\operatorname{Var}(Y)-\operatorname{MSE}(Y,\hat{Y}_{\mathrm{ols}}) & =\mathbb{E}[Y^{2}]-\left(\mathbb{E}Y\right)^{2}-\mathbb{E}[Y^{2}]+2\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]\\
+ & =2\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\left(\mathbb{E}Y\right)^{2}-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]\\
+ & =\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})+\mathbb{E}[Y\hat{Y}_{\mathrm{ols}}]-\mathbb{E}[\hat{Y}_{\mathrm{ols}}^{2}]\\
+ & =\operatorname{Var}(\hat{Y}_{\mathrm{ols}}). \blacksquare
 \end{align*}
 $$
 
-The remaining equalities follow from the corollary above. $\blacksquare$
+Putting all of the above results together, we arrive at the identities mentioned in the **Introduction and Results** section.
 
 ## Synthetic example
 
