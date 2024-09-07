@@ -28,7 +28,7 @@ $$
 =\frac{\operatorname{Cov}(X,Y)^\intercal\operatorname{Cov}(X,X)^{-1}\operatorname{Cov}(X,Y)}{\operatorname{Var}(Y)}.}
 $$
 
-In the case of a one dimensional $X$, the above is the [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) between $X$ and $Y$.
+In the case of a one dimensional $X$, the above is the square of the [Pearson correlation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient) between $X$ and $Y$.
 
 These identities may be folklore in the following sense: I believe they are well-known but that a proof, outside of the one dimensional case, is hard to find.
 Note that in the one dimensional case, OLS (with the intercept term $\hat{\beta}_0$) is simply called [simple linear regression](https://en.wikipedia.org/wiki/Simple_linear_regression).
