@@ -13,9 +13,9 @@ In this case, we prove that the R squared satisfies
 
 $$
 \boxed{R^{2}(Y,\hat{Y}_{\mathrm{ols}})
+=\frac{\operatorname{Var}(\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}
 =\frac{\operatorname{Cov}(Y,\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}
 =\frac{\operatorname{Cov}(X,Y)^\intercal \hat{\beta}_1}{\operatorname{Var}(Y)}
-=\frac{\operatorname{Var}(\hat{Y}_{\mathrm{ols}})}{\operatorname{Var}(Y)}
 =\operatorname{Corr}(Y,\hat{Y}_{\mathrm{ols}})^{2}}
 $$
 
@@ -104,9 +104,9 @@ In data-driven applications, it is standard practice to fit the coefficients on 
 This results in two distinct expectations: $\mathbb{E}$ and $\mathbb{E}_H$ ($H$ for "hold out").
 In the context of R squared, this results in two natural quantities: $R^2$ and $R_H^2$ where the latter is defined by replacing all expectations $\mathbb{E}$ in the MSE and variance by $\mathbb{E}_H$.
 We stress that the results of this section apply only to the former.
-Put more succinctly, **on the test set, R squared is not guaranteed to be equal to the square of the correlation between the predictor and target** for the OLS predictor.
+Put more succinctly, **on the test set, the R squared is not to satisfy the identities** listed at the beginning of this article.
 
-To establish that on the training set, R squared is equal to the square of the correlation between the predictor and target for the OLS predictor, we use a series of smaller results:
+To establish that on the training set, the R squared satisfies the identities listed at the beginning of this article, we use a series of smaller results:
 
 **Lemma 1.**
 *The OLS predictor is unbiased.*
@@ -213,9 +213,14 @@ Y = np.random.randn(N)
 Yhat = β[0] + X @ β[1:]
 
 R2 = 1. - ((Y - Yhat)**2).mean() / Y.var()
+CovYYhat = np.cov(Y, Yhat, bias=True)[0, 1]
+CovXY = np.cov(X, Y, rowvar=False, bias=True)[:-1, -1]
 Corr2 = np.corrcoef(Yhat, Y)[0, 1]**2
 
-# On the training set, R2 is equal to the correlation squared
+# On the training set, the R squared satisfies the identities
+np.testing.assert_allclose(R2, Yhat.var() / Y.var())
+np.testing.assert_allclose(R2, CovYYhat / Y.var())
+np.testing.assert_allclose(R2, CovXY @ β[1:] / Y.var())
 np.testing.assert_allclose(R2, Corr2)
 
 X_H = np.random.randn(N, p)
@@ -224,8 +229,13 @@ Y_H = np.random.randn(N)
 Yhat_H = β[0] + X @ β[1:]
 
 R2_H = 1. - ((Y_H - Yhat_H)**2).mean() / Y_H.var()
+CovYYhat_H = np.cov(Y_H, Yhat_H, bias=True)[0, 1]
+CovXY_H = np.cov(X_H, Y_H, rowvar=False, bias=True)[:-1, -1]
 Corr2_H = np.corrcoef(Yhat_H, Y_H)[0, 1]**2
 
-# On the test set, R2 is NOT equal to the correlation squared
+# On the test set, the R squared does not satisfy the identities
+assert not np.isclose(R2_H, Yhat_H.var() / Y.var())
+assert not np.isclose(R2_H, CovYYhat_H / Y_H.var())
+assert not np.isclose(R2_H, CovXY_H @ β[1:] / Y_H.var())
 assert not np.isclose(R2_H, Corr2_H)
 ```
