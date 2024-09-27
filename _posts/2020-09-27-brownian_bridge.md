@@ -14,7 +14,7 @@ Consider, for example, modeling the stock price as a geometric Brownian motion (
 ## Brownian bridge
 
 As described above, a Brownian bridge $B$ is a Wiener process on the time horizon $[t,T]$ that is pinned on both sides.
-That is, at time $t$ it is equal to a known value $B_t$ and at time $T$ it is equal to a known value $B_T$.
+That is, at time $t$ it is equal to a known value $B_t = a$ and at time $T$ it is equal to a known value $B_T = b$.
 Let $B_s$ be the Brownian bridge at time $s$ in $(t,T)$.
 It can be shown that $B_s$ is normal with mean
 
@@ -29,6 +29,46 @@ $$
 $$
 
 Note that the uncertainty is maximized at exactly the middle of the interval $(t+T)/2$.
+
+## Derivation
+
+Formally, the claim above concerns the conditional density $f_{B_{s}\mid B_{t},B_{T}}(x\mid a,b)$.
+Note, in particular, that the density of $B_s$ is conditioned on the future time point $B_T$.
+To simplify, we first express this quantity in terms of densities conditioned solely on prior time points:
+
+$$
+\begin{align*}
+f_{B_{s}\mid B_{t},B_{T}}(x\mid a,b) & =\frac{f_{B_{t},B_{s},B_{T}}(a,x,b)}{f_{B_{t},B_{T}}(a,b)}\\
+ & =\frac{f_{B_{T}\mid B_{t},B_{s}}(b\mid a,x)f_{B_{t},B_{s}}(a,x)}{f_{B_{T}\mid B_{t}}(b\mid a)f_{B_{t}}(a)}\\
+ & =\frac{f_{B_{T}\mid B_{t},B_{s}}(b\mid a,x)f_{B_{s}\mid B_{t}}(x\mid a)f_{B_{t}}(a)}{f_{B_{T}\mid B_{t}}(b\mid a)f_{B_{t}}(a)}\\
+ & =\frac{f_{B_{T}\mid B_{t},B_{s}}(b\mid a,x)f_{B_{s}\mid B_{t}}(x\mid a)}{f_{B_{T}\mid B_{t}}(b\mid a)}.
+\end{align*}
+$$
+
+Since $B$ is a Markov process, we have that $f_{B_{T}\mid B_{t},B_{s}}(b\mid a,x)=f_{B_{T}\mid B_{s}}(b\mid x)$.
+Moreover, $B_{t_{2}}\mid B_{t_{1}}\sim\mathcal{N}(B_{t_{1}},t_{2}-t_{1})$ for any $t_{1}<t_{2}$.
+Putting these facts together, the desired result follows by algebra.
+
+The claim is also tested numerically below.
+
+
+```python
+import numpy as np
+from scipy.stats import norm
+
+t, s, T = np.random.uniform(0., 1., size=3).cumsum()
+a, x, b = np.random.randn(3)
+
+loc = a + (s - t) / (T - t) * (b - a),
+var = (T - s) * (s - t) / (T - t)
+density = norm.pdf(x, loc=loc, scale=np.sqrt(var))
+
+value = norm.pdf(b - x, scale=np.sqrt(T - s)) \
+      * norm.pdf(x - a, scale=np.sqrt(s - t)) \
+      / norm.pdf(b - a, scale=np.sqrt(T - t))
+
+np.testing.assert_allclose(density, value)
+```
 
 ## Simulation
 
@@ -141,6 +181,6 @@ sims = sim_gbm_bridge(
 
 
     
-![png](/assets/posts/2020-09-27-brownian_bridge_files/2020-09-27-brownian_bridge_17_0.png)
+![png](/assets/posts/2020-09-27-brownian_bridge_files/2020-09-27-brownian_bridge_19_0.png)
     
 
