@@ -5,9 +5,16 @@ redirect_from:
   - /blog/2015/pricing-american-binary-options/
 title: Closed-form expressions for perpetual and finite-maturity American binary options
 ---
-In this article, we derive the price of an American binary (a.k.a. digital) call and put options assuming that the underlying asset follows geometric Brownian motion. We handle the case in which a finite expiry time is specified for the option. We obtain results for the corresponding perpetual (i.e., no expiry) options by taking limits.
+**Abstract.** In this article, we derive an analytic formula for the value of American binary (a.k.a. digital) put and call options under [Black-Scholes model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model) of option pricing.
+This model includes the assumption that the underlying asset follows a [geometric Brownian motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion).
+The availability of an analytic formula gives practitioners easy access to options pricing [Greeks](https://en.wikipedia.org/wiki/en:Greeks_(finance)) for [hedging](https://en.wikipedia.org/wiki/Delta_neutral) and sensitivity analyses.
+We handle the general case in which a finite expiry time ($T < \infty$) is specified for the option, obtaining formulas for the perpetual ($T = \infty$) case by taking limits.
+Our approach is as follows: we first show that the option value is identical to the [Laplace transform](https://en.wikipedia.org/wiki/Laplace_transform) of $f \cdot \chi_{[0, T]}$ evaluated at the risk free rate of return where $f$ is the density of the first time an arithmetic Brownian motion hits a particular level.
+We then derive an expression for the Laplace transform using ordinary calculus.
+The expression for the Laplace transform may be of independent interest.
+We verify the correctness of the expression using both symbolic algebra and numerical PDEs.
 
-**Updated August 10, 2024.**
+*Updated August 10, 2024.*
 A previous version of this article defined the symbol $a$ (see below) erroneously.
 Namely, it was defined as the negation of the quantity that now appears in the corrected article.
 Thanks to Grant Garrison for catching this error.
@@ -52,24 +59,23 @@ $$
     a = \frac{\log K - \log S_0}{\sigma}.
 $$
 
-In other words, $\tau$ is the first time a Wiener process with drift $\mu$ hits the level $a$.
-
+In other words, $\tau$ is the first time a Wiener process with drift $\mu$ (a.k.a. an arithmetic Brownian motion) hits the level $a$.
 The [density of the first time a Wiener process with drift $\mu$ hits the level $a$](https://math.stackexchange.com/questions/1053294/density-of-first-hitting-time-of-brownian-motion-with-drift) is well-known:
 
 $$
     f(t) = \frac{\left| a \right|}{\sqrt{2 \pi t^3}} \exp \biggl( -\frac{\left( a - \mu t \right)^2}{2t} \biggr).
 $$
 
-Let $T \leq \infty$ be the expiry time of the option.
-The fair price of either instrument (in the nontrivial case) is
+Next, let $T \leq \infty$ be the expiry time of the option.
+Since the option should be exercised as soon as it is in the money (i.e., at time $\tau$), it follows that the fair price of either instrument (in the nontrivial case) is
 
 $$
     \mathbb{E} e^{-r \tau} \chi_{[0, T]}(\tau)
-    = \int_0^T e^{-r t} f(t) dt.
+    = \int_0^T e^{-r t} f(t) dt
 $$
 
 where $\chi_A$ is the [indicator function](https://en.wikipedia.org/wiki/Indicator_function) on a set $A$.
-The notation above reveals that this is none other than the [Laplace transform](https://en.wikipedia.org/wiki/Laplace_transform) of $f \cdot \chi_{[0, T]}$ evaluated at $r$.
+The notation above reveals that this is none other than the Laplace transform of $f \cdot \chi_{[0, T]}$ evaluated at $r$.
 
 **Lemma.**
 $\mu^2 + 2r$ is nonnegative.
@@ -83,7 +89,7 @@ $$
     \geq \left(r - \frac{1}{2} \sigma^2 \right)^2 + 2r \sigma^2
     = r^2 + r \sigma^2 + \frac{1}{4} \sigma^4
     = \left(r + \frac{1}{2} \sigma^2 \right)^2
-    \geq 0.
+    \geq 0.\quad \blacksquare
 $$
 
 ## Laplace transform
@@ -125,13 +131,6 @@ $$
     \right]
 $$
 
-Before proving this result, note that the infinite horizon case ($T = \infty$) follows immediately by taking limits as $T \rightarrow \infty$ and applying the [dominated convergence theorem](https://en.wikipedia.org/wiki/Dominated_convergence_theorem):
-
-**Corollary.**
-If $b \equiv \sqrt{\mu^2 + 2r}$ is real, then $\mathbb{E} e^{-r \tau} = e^{a \mu - |a| b}$.
-
-Let us now prove the main result.
-
 *Proof*.
 Denote by $F(T)$ the expression on the right-hand side of the above equation.
 Since $\operatorname{sgn}(a) a = |a|$ and
@@ -141,10 +140,11 @@ $$
     \lim_{T \downarrow 0} \Phi \biggl(
         \frac{\pm \operatorname{sgn}(a) b T - \left| a \right|}{\sqrt{T}}
     \biggr)
-    = 0
+    = 0,
 $$
 
 it follows that $\lim_{T \downarrow 0} F(T) = 0$.
+
 If we can establish $F^\prime(t) = e^{-r t} f(t)$ for all $0 < t < \infty$, then by the [fundamental theorem of calculus](https://en.wikipedia.org/wiki/Fundamental_theorem_of_calculus),
 
 $$
@@ -160,9 +160,14 @@ F^{\prime}(t) & =\operatorname{sgn}(a)e^{a(\mu-b)}\left[\left(\frac{bt-a}{\sqrt{
  & =\frac{\operatorname{sgn}(a)e^{a(\mu-b)}}{2\sqrt{2\pi t^{3}}}\left[\left(a+bt\right)\exp\biggl(-\frac{\left(a-bt\right)^{2}}{2t}\biggr)+e^{2ab}\left(a-bt\right)\exp\biggl(-\frac{\left(a+bt\right)^{2}}{2t}\biggr)\right]\\
  & =\frac{\operatorname{sgn}(a)e^{a(\mu-b)}}{2\sqrt{2\pi t^{3}}}\left[\left(a+bt\right)\exp\biggl(-\frac{\left(a-bt\right)^{2}}{2t}\biggr)+\left(a-bt\right)\exp\biggl(-\frac{\left(a-bt\right)^{2}}{2t}\biggr)\right]\\
  & =\frac{\left|a\right|e^{a(\mu-b)}}{\sqrt{2\pi t^{3}}}\exp\biggl(-\frac{\left(a-bt\right)^{2}}{2t}\biggr)\\
- & =e^{-rt}\frac{\left|a\right|}{\sqrt{2\pi t^{3}}}\exp\biggl(-\frac{\left(a-\mu t\right)^{2}}{2t}\biggr).
+ & =e^{-rt}\frac{\left|a\right|}{\sqrt{2\pi t^{3}}}\exp\biggl(-\frac{\left(a-\mu t\right)^{2}}{2t}\biggr). \quad \blacksquare
 \end{align*}
 $$
+
+The infinite horizon case ($T = \infty$) follows immediately by taking limits as $T \rightarrow \infty$ and applying the [dominated convergence theorem](https://en.wikipedia.org/wiki/Dominated_convergence_theorem):
+
+**Corollary.**
+If $b \equiv \sqrt{\mu^2 + 2r}$ is real, then $\mathbb{E} e^{-r \tau} = e^{a \mu - |a| b}$.
 
 ## Implementation
 
@@ -170,7 +175,7 @@ $$
 ```python
 import numpy as np
 from numpy.typing import ArrayLike
-from scipy.special import erf
+from scipy.stats import norm
 
 def american_binary(
     asset_price: ArrayLike,
@@ -233,14 +238,15 @@ def american_binary(
     a = np.log(strike / asset_price) / volatility
     μ = (r - dividend_rate - 0.5 * volatility**2) / volatility
     b = np.sqrt(μ**2 + 2. * r)
-    return 0.5 * np.exp(a * (μ - b)) * (
-        1 + np.sign(a) * erf((b * T - a) / np.sqrt(2. * T)) + np.exp(2. * a * b) * (
-            1 - np.sign(a) * erf((b * T + a) / np.sqrt(2. * T))))
+    return np.exp(a * (μ - b)) * (
+        norm.cdf(np.sign(a) * (b * T - a) / np.sqrt(T))
+        + np.exp(2. * a * b) * norm.cdf(-np.sign(a) * (b * T + a) / np.sqrt(T))
+    )
 ```
 
 
     
-![png](/assets/posts/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_23_0.png)
+![png](/assets/posts/2015-03-01-pricing_american_binary_options_files/2015-03-01-pricing_american_binary_options_22_0.png)
     
 
 
@@ -286,9 +292,11 @@ The value of the American binary call with asset price $S_t \leq K$ satisfies th
 Below, a [finite difference](https://en.wikipedia.org/wiki/Finite_difference_method) solver for the BVP is given.
 The solver quantizes time and space.
 At each point in quantized time, it solves a tridiagonal linear system using the [Thomas algorithm](https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm).
+Tables generated from this code, also given below, demonstrate that as the quantization is made finer, the error between the numeric and analytic solutions vanish.
 
 
 ```python
+import numpy as np
 from numba import njit
 from numpy.typing import NDArray
 
@@ -404,6 +412,8 @@ def american_binary_pde(
     return S, V
 ```
 
+#### Put
+
 
 
 
@@ -430,7 +440,6 @@ def american_binary_pde(
       <th>δ</th>
       <th>σ</th>
       <th>T</th>
-      <th>put</th>
       <th>num_points</th>
       <th>num_steps</th>
       <th>L2 error</th>
@@ -445,10 +454,146 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>False</td>
       <td>100</td>
       <td>100</td>
-      <td>3.868804e-05</td>
+      <td>0.049058</td>
+      <td>0.004720</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>200</td>
+      <td>200</td>
+      <td>0.016633</td>
+      <td>0.002290</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>400</td>
+      <td>400</td>
+      <td>0.005757</td>
+      <td>0.001129</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>800</td>
+      <td>800</td>
+      <td>0.002014</td>
+      <td>0.000560</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>1600</td>
+      <td>1600</td>
+      <td>0.000708</td>
+      <td>0.000279</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>3200</td>
+      <td>3200</td>
+      <td>0.000250</td>
+      <td>0.000139</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>6400</td>
+      <td>6400</td>
+      <td>0.000088</td>
+      <td>0.000070</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>12800</td>
+      <td>12800</td>
+      <td>0.000031</td>
+      <td>0.000035</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+#### Call
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>K</th>
+      <th>r</th>
+      <th>δ</th>
+      <th>σ</th>
+      <th>T</th>
+      <th>num_points</th>
+      <th>num_steps</th>
+      <th>L2 error</th>
+      <th>L∞ error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100.0</td>
+      <td>0.04</td>
+      <td>0.01</td>
+      <td>0.2</td>
+      <td>1.0</td>
+      <td>100</td>
+      <td>100</td>
+      <td>0.003907</td>
       <td>0.000985</td>
     </tr>
     <tr>
@@ -458,11 +603,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>True</td>
-      <td>100</td>
-      <td>100</td>
-      <td>1.611105e-04</td>
-      <td>0.004720</td>
+      <td>200</td>
+      <td>200</td>
+      <td>0.001333</td>
+      <td>0.000476</td>
     </tr>
     <tr>
       <th>2</th>
@@ -471,11 +615,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>False</td>
-      <td>200</td>
-      <td>200</td>
-      <td>1.326254e-05</td>
-      <td>0.000476</td>
+      <td>400</td>
+      <td>400</td>
+      <td>0.000463</td>
+      <td>0.000234</td>
     </tr>
     <tr>
       <th>3</th>
@@ -484,11 +627,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>True</td>
-      <td>200</td>
-      <td>200</td>
-      <td>5.489578e-05</td>
-      <td>0.002290</td>
+      <td>800</td>
+      <td>800</td>
+      <td>0.000162</td>
+      <td>0.000116</td>
     </tr>
     <tr>
       <th>4</th>
@@ -497,11 +639,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>False</td>
-      <td>400</td>
-      <td>400</td>
-      <td>4.614911e-06</td>
-      <td>0.000234</td>
+      <td>1600</td>
+      <td>1600</td>
+      <td>0.000057</td>
+      <td>0.000058</td>
     </tr>
     <tr>
       <th>5</th>
@@ -510,11 +651,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>True</td>
-      <td>400</td>
-      <td>400</td>
-      <td>1.904722e-05</td>
-      <td>0.001129</td>
+      <td>3200</td>
+      <td>3200</td>
+      <td>0.000020</td>
+      <td>0.000029</td>
     </tr>
     <tr>
       <th>6</th>
@@ -523,11 +663,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>False</td>
-      <td>800</td>
-      <td>800</td>
-      <td>1.618464e-06</td>
-      <td>0.000116</td>
+      <td>6400</td>
+      <td>6400</td>
+      <td>0.000007</td>
+      <td>0.000014</td>
     </tr>
     <tr>
       <th>7</th>
@@ -536,141 +675,10 @@ def american_binary_pde(
       <td>0.01</td>
       <td>0.2</td>
       <td>1.0</td>
-      <td>True</td>
-      <td>800</td>
-      <td>800</td>
-      <td>6.670684e-06</td>
-      <td>0.000560</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>False</td>
-      <td>1600</td>
-      <td>1600</td>
-      <td>5.698837e-07</td>
-      <td>0.000058</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>1600</td>
-      <td>1600</td>
-      <td>2.347245e-06</td>
-      <td>0.000279</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>False</td>
-      <td>3200</td>
-      <td>3200</td>
-      <td>2.010720e-07</td>
-      <td>0.000029</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>3200</td>
-      <td>3200</td>
-      <td>8.279000e-07</td>
-      <td>0.000139</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>False</td>
-      <td>6400</td>
-      <td>6400</td>
-      <td>7.101676e-08</td>
-      <td>0.000014</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>6400</td>
-      <td>6400</td>
-      <td>2.923577e-07</td>
-      <td>0.000070</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>False</td>
       <td>12800</td>
       <td>12800</td>
-      <td>2.509538e-08</td>
+      <td>0.000003</td>
       <td>0.000007</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>12800</td>
-      <td>12800</td>
-      <td>1.033023e-07</td>
-      <td>0.000035</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>False</td>
-      <td>25600</td>
-      <td>25600</td>
-      <td>8.870363e-09</td>
-      <td>0.000004</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>100.0</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.2</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>25600</td>
-      <td>25600</td>
-      <td>3.651204e-08</td>
-      <td>0.000017</td>
     </tr>
   </tbody>
 </table>
