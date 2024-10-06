@@ -1,0 +1,21 @@
+footer, nav, summary {
+  display: none;
+}
+
+/* Style the printed content */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+    padding: 20px;
+}
+
+a {
+    text-decoration: underline;
+    color: blue;
+}
+
+a::after {
+    content: " (" attr(href) ")";
+}
