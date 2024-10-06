@@ -269,3 +269,7 @@ button[type="submit"] {
 button[type="submit"]:hover {
   background-color: #005fbf;
 }
+
+summary {
+  cursor: pointer;
+}
