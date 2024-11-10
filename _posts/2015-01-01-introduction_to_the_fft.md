@@ -226,68 +226,115 @@ Let's try it on an example image.
 
 
 ```python
-from io import BytesIO
-import requests
-
-from typing import List, Tuple
 import sys
 
-from PIL import Image, ImageOps
 import numpy as np
+from PIL import Image
+from numpy.fft import fft2, fftshift, ifft2, ifftshift
+from scipy.sparse import csr_matrix
 
-Lossy = Tuple[int, int, int, int, float, np.ndarray]
+def compress_image(image: Image, frac: float) -> tuple[csr_matrix, csr_matrix, csr_matrix]:
+    """Compress (lossy) an image.
 
+    Parameters
+    ----------
+    image
+        A PIL image
+    frac
+        Fraction of frequency components to drop per axis
 
-def _masks(height: int, width: int, freq: float) -> Tuple[np.ndarray, np.ndarray]:
-    i = np.fft.fftfreq(height) <= freq
-    j = np.fft.rfftfreq(width) <= freq
-    return i, j
+    Returns
+    -------
+    A sparse matrix for each of the color channels (R, G, B)
+    """
+    assert 0.0 <= frac <= 1.0
+    frac = 0.5 * (frac + 1.0)
+    
+    # Convert the image to a numpy array and split into RGB channels
+    img_array = np.array(image)
+    r, g, b = img_array[:, :, 0], img_array[:, :, 1], img_array[:, :, 2]
+    
+    # Perform FFT on each channel
+    r_fft = fft2(r)
+    g_fft = fft2(g)
+    b_fft = fft2(b)
+    
+    # Shift zero-frequency component to center
+    r_fft_shifted = fftshift(r_fft)
+    g_fft_shifted = fftshift(g_fft)
+    b_fft_shifted = fftshift(b_fft)
+    
+    # Compute the number of high-frequency components to keep based on the fraction
+    height, width = r.shape
+    cutoff_x = int(width * frac)
+    cutoff_y = int(height * frac)
+    
+    # Zero out high-frequency components
+    def zero(arr):
+        arr[+cutoff_y:, :] = 0
+        arr[:-cutoff_y, :] = 0
+        arr[:, +cutoff_x:] = 0
+        arr[:, :-cutoff_x] = 0
 
+    zero(r_fft_shifted)
+    zero(g_fft_shifted)
+    zero(b_fft_shifted)
+    
+    # Convert the frequency-domain data to CSR format (sparse matrices)
+    r_sparse = csr_matrix(r_fft_shifted)
+    g_sparse = csr_matrix(g_fft_shifted)
+    b_sparse = csr_matrix(b_fft_shifted)
 
-def image_to_lossy(image: Image, freq: float) -> Lossy:
-    channel = np.array(image) / 255.0
-    n_bytes = np.prod(channel.shape)
-    height, width = channel.shape
-    channel = np.fft.rfft2(channel)
-    rows, cols = channel.shape
-    i, j = _masks(height, width, freq)
-    channel = channel[np.ix_(i, j)]
-    channel = channel.astype(np.cfloat)
-    n_bytes_compressed = np.prod(channel.shape) * 8  # 8 bytes per cfloat
-    ratio = n_bytes_compressed / n_bytes
-    sys.stderr.write(f"Compressed to {ratio * 100:.2f}% of original size\n")
-    return height, width, rows, cols, freq, channel
+    # Calculate compression ratio
+    total_elements = r.size + g.size + b.size
+    non_zero_elements = r_sparse.nnz + g_sparse.nnz + b_sparse.nnz
+    compression_ratio = total_elements / non_zero_elements
+    
+    # Print the compression ratio
+    print(f"Compression ratio: {compression_ratio:.4f}", file=sys.stderr)
+    
+    return r_sparse, g_sparse, b_sparse
 
+def uncompress_image(r: csr_matrix, g: csr_matrix, b: csr_matrix) -> Image:
+    """Uncompress an image.
+    
+    Parameters
+    ----------
+    r
+        Compressed red channel
+    g
+        Compressed green channel
+    b
+        Compressed blue channel
 
-def image_from_lossy(lossy: Lossy) -> Image:
-    height, width, rows, cols, freq, lossy_channel = lossy
-    i, j = _masks(height, width, freq)
-    channel = np.zeros([rows, cols], dtype=np.cfloat)
-    channel[np.ix_(i, j)] = lossy_channel
-    channel = np.fft.irfft2(channel)
-    channel = np.real(channel)
-    channel = (channel * 255).astype(np.uint8)
-    return Image.fromarray(channel)
-
-
-url = "https://pixnio.com/free-images/2018/06/29/2018-06-29-23-01-01-1200x675.jpg"
-response = requests.get(url)
-image = Image.open(BytesIO(response.content))
-image = ImageOps.grayscale(image)
-
-lossy = image_to_lossy(image, freq=0.1)
-lossy_image = image_from_lossy(lossy)
+    Returns
+    -------
+    A PIL image
+    """
+    r_fft_shifted = r.toarray()
+    g_fft_shifted = g.toarray()
+    b_fft_shifted = b.toarray()
+    
+    r_reconstructed = np.abs(ifft2(ifftshift(r_fft_shifted)))
+    g_reconstructed = np.abs(ifft2(ifftshift(g_fft_shifted)))
+    b_reconstructed = np.abs(ifft2(ifftshift(b_fft_shifted)))
+    
+    img_array = np.stack([r_reconstructed, g_reconstructed, b_reconstructed], axis=-1)
+    return Image.fromarray(np.uint8(np.clip(img_array, 0, 255)))
 ```
-
-    Compressed to 48.40% of original size
-
 
 
 ```python
-image
+import requests
+from io import BytesIO
+
+import matplotlib.pyplot as plt
+
+url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/767px-The_Earth_seen_from_Apollo_17.jpg"
+response = requests.get(url)
+original_image = Image.open(BytesIO(response.content))
+plt.imshow(original_image);
 ```
-
-
 
 
     
@@ -296,16 +343,17 @@ image
 
 
 
-
 ```python
-lossy_image
+r, g, b = compress_image(image=np.array(original_image), frac=0.25)
+uncompressed_image = uncompress_image(r, g, b)
+plt.imshow(uncompressed_image);
 ```
 
+    Compression ratio: 16.0628
 
 
 
     
-![png](/assets/posts/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_55_0.png)
+![png](/assets/posts/2015-01-01-introduction_to_the_fft_files/2015-01-01-introduction_to_the_fft_55_1.png)
     
-
 
