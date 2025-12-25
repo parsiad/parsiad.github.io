@@ -8,8 +8,9 @@ title: About
 
 <img id="avatar" src="https://2.gravatar.com/avatar/e68eee66a27d99a1e78b5663e62f4a29a5657f7bb8fbc5e15ff827e52f26ff00?size=200">
 
+I work on pretraining at [OpenAI](https://openai.com).
 I have held positions at [PDT Partners](https://pdtpartners.com) and [Google LLC](http://google.com).
-Prior to that, I was a Research Post-Doctoral Assistant Professor in the [Department of Mathematics at the University of Michigan at Ann Arbor](https://lsa.umich.edu/math) under the mentorship of [Erhan Bayraktar](https://sites.lsa.umich.edu/erhan/).
+Prior to industry, I was a Research Post-Doctoral Assistant Professor in the [Department of Mathematics at the University of Michigan at Ann Arbor](https://lsa.umich.edu/math) under the mentorship of [Erhan Bayraktar](https://sites.lsa.umich.edu/erhan/).
 
 <a href="/assets/images/nyc_20240423_192340.jpeg"><img id="nyc" src="/assets/images/nyc_20240423_192340.jpeg"></a>
 
