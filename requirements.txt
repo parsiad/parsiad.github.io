@@ -1,0 +1,12 @@
+graphviz
+matplotlib
+numba
+numpy
+pandas
+pillow
+scikit-learn
+scipy
+seaborn
+statsmodels
+tabulate
+yfinance

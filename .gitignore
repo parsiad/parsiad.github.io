@@ -1,0 +1,6 @@
+# Ignore all blog content generated from src
+__pycache__
+content/blog/*.md
+!content/blog/_index.md
+/public
+/tmp

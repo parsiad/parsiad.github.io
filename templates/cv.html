@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+    <title>{% block title %}{{ page.title | default(value=section.title) }}{% endblock title %} &mdash; {{ config.title }}</title>
+    <style>
+        body {
+            font-family: "Times", serif;
+            font-size: 15px;
+            padding: 1em;
+        }
+
+        a {
+            color: #00f;
+            text-decoration: none;
+        }
+
+        a:after {
+            content: " (" attr(href) ")";
+            font-size: 0.8em;
+        }
+
+        table a:after {
+            content: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Parsiad Azimzadeh</h1>
+    {% block content %}
+    {{ page.content | safe }}
+    {% endblock content %}
+</body>
+
+</html>

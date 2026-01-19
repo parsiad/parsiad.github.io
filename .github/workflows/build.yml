@@ -1,0 +1,30 @@
+name: Zola on GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Publish site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          xargs -a system-packages.txt sudo apt-get install -y
+      - name: Make blog posts
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install jupyter jupytext
+          pip install -r requirements.txt
+          make -C src -j$(nproc)
+      - name: Build and deploy
+        uses: shalzz/zola-deploy-action@v0.22.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

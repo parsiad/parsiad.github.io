@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found{% endblock title %}
+
+{% block content %}
+<h1>Page not found</h1>
+<p>The requested page could not be found.</p>
+<p>If you expected something to be here, drop me a line and I will do my best to fix it. My contact details are on the <a href="{{ get_url(path="") }}">landing page</a>.</p>
+{% endblock content %}
