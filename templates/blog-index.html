@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  {{ section.title }}
+</h1>
+
+<form method="get" id="search" action="https://duckduckgo.com">
+  <input type="hidden" name="sites" value="https://parsiad.ca/blog">
+  <input type="text" name="q" placeholder="Search…" autocomplete="off">
+  <button type="submit">Search</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Post</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for page in section.pages %}
+    <tr>
+      <td><a href="{{ page.permalink | safe }}">{{ page.title }}</a></td>
+      <td><time datetime="{{ page.date }}">{{ page.date | date(format="%B %-d, %Y") }}</time></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
