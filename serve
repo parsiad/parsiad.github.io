@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+watchexec_version="2.7.2"
+watchexec_release="watchexec-${watchexec_version}-x86_64-unknown-linux-musl"
+watchexec_sha256="a2c01f82fb4cdafca1fa12cb88e4a1145dec63364dbdf92664efbaac3bb44dd2"
+
+zola_version="0.23.4"
+zola_release="zola-v${zola_version}-x86_64-unknown-linux-musl"
+zola_sha256="d99c51302ebbf909a0d83d4319d4d745b56a93dc49c4a69878c0f0dcaa4c8531"
+
+mkdir -p bin
+
+if [[ ! -x bin/watchexec ]]; then
+  curl -fsSL \
+    "https://github.com/watchexec/watchexec/releases/download/v${watchexec_version}/${watchexec_release}.tar.xz" \
+    -o bin/watchexec.tar.xz
+  printf '%s  %s\n' "$watchexec_sha256" bin/watchexec.tar.xz | sha256sum --check --status
+  tar -xJf bin/watchexec.tar.xz -C bin --strip-components=1 "${watchexec_release}/watchexec"
+  rm bin/watchexec.tar.xz
+fi
+
+if [[ ! -x bin/zola ]]; then
+  curl -fsSL \
+    "https://github.com/getzola/zola/releases/download/v${zola_version}/${zola_release}.tar.gz" \
+    -o bin/zola.tar.gz
+  printf '%s  %s\n' "$zola_sha256" bin/zola.tar.gz | sha256sum --check --status
+  tar -xzf bin/zola.tar.gz -C bin zola
+  rm bin/zola.tar.gz
+fi
+
+bin/zola serve &
+zola_pid=$!
+trap 'kill "$zola_pid" 2>/dev/null || true' EXIT
+
+bin/watchexec -r -w src 'make -C src'

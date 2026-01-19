@@ -1,0 +1,14 @@
+base_url = "https://parsiad.ca"
+build_search_index = false
+compile_sass = true
+generate_feeds = true
+title = "Parsiad Azimzadeh"
+
+[extra]
+menu = [
+  { name = "About", url = "/" },
+  { name = "Blog", url = "/blog/" },
+  { name = "Publications", url = "/pubs/" },
+  { name = "Code", url = "/code/" },
+  { name = "Solutions", url = "/sols/" },
+]
