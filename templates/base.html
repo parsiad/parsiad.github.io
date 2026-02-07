@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{% block title %}{{ page.title | default(value=section.title) }}{% endblock title %} &mdash; {{ config.title }}</title>
   <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; {{ config.title }}" type="application/atom+xml">
   <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
   <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
