@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Multivariate Taylor&#x27;s Theorem &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">Multivariate Taylor&#x27;s Theorem</h1>
+<time datetime="2021-07-20">July 20, 2021</time>
+<h2 id="motivation">Motivation</h2>
+<p>This short post derives Taylor's Theorem for multivariate functions by employing Taylor's Theorem in a single variable.</p>
+<h2 id="derivation">Derivation</h2>
+<p>Let $f : \mathbb{R}^d \rightarrow \mathbb{R}$.
+For vectors $x$ and $v$ in $\mathbb{R}^d$, define $g : \mathbb{R} \rightarrow \mathbb{R}$ by $g(t) = f(x + tv)$.
+If $g$ is $K$ times differentiable at zero, Taylor's theorem in 1d tells us</p>
+<p>$$
+\tag{1}
+f(x + tv)
+= g(t)
+= \sum_{k = 0}^K \frac{t^k}{k!} g^{(k)}(0)
++ o(t^K) \text{ as } t \rightarrow 0.
+$$</p>
+<p>Suppose</p>
+<p>$$
+\tag{2}
+g^{(k)}(t)
+= \sum_{i_1, \ldots, i_k}
+v_{i_1} \cdots v_{i_k}
+\frac{\partial^k f}{\partial x_{i_1} \cdots x_{i_k}}(x + tv).
+$$</p>
+<p>By chain rule,</p>
+<p>$$
+g^{(k + 1)}(t)
+= \sum_{i_1, \ldots, i_k}
+v_{i_1} \cdots v_{i_k}
+\left \langle
+v,
+\nabla \left[
+\frac{\partial^k f}{\partial x_{i_1} \cdots x_{i_k}}
+\right] (x + tv)
+\right \rangle.
+$$</p>
+<p>Simplifying, we arrive at (2) with $k$ replaced by $k + 1$.
+Since (2) is trivially satisfied at $k = 1$, it follows by induction that (2) holds for all positive integers $k$.</p>
+<p>The form (2) is redundant since, assuming the conditions of <a rel="external" href="https://en.wikipedia.org/wiki/Symmetry_of_second_derivatives#Sufficiency_of_twice-differentiability">Clairaut's theorem</a>, partial derivatives commute (e.g., $f_{x_1 x_2} = f_{x_2 x_1}$).
+For a multi-index $\alpha = (\alpha_1, \ldots, \alpha_d)$ in $\mathbb{Z}^d_{\geq 0}$, define $|\alpha| = \alpha_1 + \cdots + \alpha_d$ and</p>
+<p>$$
+D^\alpha f
+= \frac{\partial^{|\alpha|} f}{\partial x_1^{\alpha_1} \cdots \partial x_d^{\alpha_d}}.
+$$</p>
+<p>With this notation we can write (2) as</p>
+<p>$$
+g^{(k)}(t)
+= \sum_{|\alpha| = k}
+\frac{k!}{\alpha_1! \cdots \alpha_d!}
+v_1^{\alpha_1} \cdots v_d^{\alpha_d}
+D^\alpha f(x + tv).
+$$</p>
+<p>Substituting this into (1), we obtain the desired Taylor polynomial:</p>
+<p>$$
+f(x + tv)
+= \sum_{k = 0}^K t^k
+\sum_{|\alpha| = k}
+\frac{1}{\alpha_1! \cdots \alpha_d!}
+v_1^{\alpha_1} \cdots v_d^{\alpha_d}
+D^\alpha f(x)
++ o(t^K) \text{ as } t \rightarrow 0
+$$</p>
+<h2 id="remainder">Remainder</h2>
+<p>If, in addition, $g$ is $K + 1$ times differentiable, we can extend the Cauchy or Lagrange form of the remainder term to the multivariate setting.
+For example, the Lagrange form is</p>
+<p>$$
+o(t^K) = \frac{t^{K + 1}}{\left( K + 1 \right)!} g^{(K + 1)}(\theta)
+$$</p>
+<p>where $\theta$ is some number between zero and $t$.
+Substituting (2) into the above, we can obtain by triangle inequality, the (loose) bound</p>
+<p>$$
+o(t^K)
+\leq \frac{
+\left( d \left| t \right| \left \Vert v \right \Vert_\infty \right)^{K + 1}
+}{\left( K + 1 \right)!}
+\max_{|\alpha| = K + 1}
+\left |D^\alpha f(x + \theta v) \right|.
+$$</p>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>

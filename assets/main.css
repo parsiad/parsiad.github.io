@@ -1,0 +1,288 @@
+:root {
+    /* --bg: #fafafa; */
+        --bg: #fff;
+    --code-bg: #eff1f5;
+    --fg: #1a1a1a;
+    --hover: #1a4a7a;
+    --link: #2b6cb0;
+    --maxw: 42rem;
+    --muted: #666;
+    --rule: #ddd;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+
+html {
+    font-size: 18px;
+}
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "EB Garamond", serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 1.5rem 1rem 1rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: normal;
+    line-height: 1.25;
+    margin: 2rem 0 0.75rem;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+h2 {
+    border-bottom: 1px solid var(--rule);
+    font-size: 1.4rem;
+    padding-bottom: 0.25rem;
+}
+
+p,
+ul,
+ol,
+table,
+form {
+    margin: 1rem 0;
+}
+
+#content .katex {
+    font-size: 1.1rem;
+}
+
+time:not(table time) {
+    color: var(--muted);
+}
+
+/* Links */
+#content a,
+footer a {
+    color: var(--link);
+    background-image: linear-gradient(var(--link), var(--link));
+    background-size: 0 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    transition: background-size 0.25s ease, color 0.25s ease;
+}
+
+#content a:hover,
+footer a:hover {
+    color: var(--hover);
+    background-size: 100% 2px;
+}
+
+/* Layout */
+
+body>h1 {
+    margin-top: 0;
+}
+
+body>h1,
+nav,
+#content,
+footer {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--maxw);
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    margin: 1rem 0 2rem;
+    padding: 0;
+}
+
+/* Content */
+
+#content img {
+    height: auto;
+    max-width: 100%;
+}
+
+#avatar {
+    border-radius: 50%;
+    box-shadow: 0px 0px 0.25em rgba(0, 0, 0, 0.25);
+    float: left;
+    margin: 0 1.5rem 1rem 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    padding: 0.4rem 0.2rem;
+    text-align: left;
+}
+
+thead,
+tr:not(:last-child) {
+    border-bottom: 1px solid var(--rule);
+}
+
+/* Search */
+
+form#search {
+    display: flex;
+    gap: 0.5rem;
+}
+
+form#search input {
+    flex: 1;
+    font-family: inherit;
+    padding: 0.4rem 0.5rem;
+}
+
+form#search button {
+    cursor: pointer;
+    padding: 0.4rem 0.7rem;
+}
+
+/* Bullets */
+
+#content ul {
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+
+#content ul li {
+    line-height: 1.6;
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+    position: relative;
+    transition: color 0.2s;
+}
+
+#content ul li::before {
+    color: var(--muted);
+    content: "▹";
+    font-size: 1.2em;
+    left: 0;
+    line-height: 1.2;
+    position: absolute;
+}
+
+/* Footer */
+
+footer {
+    color: var(--muted);
+    font-size: 0.75rem;
+    padding-top: 1rem;
+    text-align: right;
+}
+
+/* Nav */
+
+nav a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--fg);
+}
+
+nav a.active {
+    text-decoration: underline;
+}
+
+/* Code */
+
+#content code {
+    font-size: 0.75rem;
+}
+
+pre code {
+    display: block;
+    overflow-x: scroll;
+    padding: 1rem;
+}
+
+details {
+    margin: 1em 0;
+}
+
+details summary {
+    background: var(--code-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    list-style: none;
+    margin-bottom: -6px;
+    padding: 0.3em 0.8em;
+}
+
+details pre code {
+    border: 0;
+}
+details summary:hover {
+    color: var(--hover);
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details pre {
+    margin-top: 0;
+}
+
+/* Mobile tweaks */
+
+@media (max-width: 600px) {
+    #avatar {
+        display: block;
+        float: none;
+        margin: 0 auto 1rem;
+    }
+}
+
+/* Print tweaks */
+
+@media print {
+
+    h1 {
+        margin-top: 0;
+    }
+
+    #content {
+        max-width: none;
+    }
+
+    body>h1,
+    footer,
+    nav,
+    details summary {
+        display: none;
+    }
+
+    a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.85rem;
+    }
+}

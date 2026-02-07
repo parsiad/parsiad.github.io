@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>An introduction to the curiously repeating template pattern &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">An introduction to the curiously repeating template pattern</h1>
+<time datetime="2024-09-11">September 11, 2024</time>
+<h2 id="motivation">Motivation</h2>
+<p>The curiously recurring template pattern (CRTP) is a C++ polymorphism technique allowing a base class to access derived class members without virtual table lookups.
+This is accomplished via <a rel="external" href="https://en.wikipedia.org/wiki/Template_metaprogramming">template metaprogramming</a>.</p>
+<p>Note that aggressive applications of template metaprogramming can often be a form of premature optimization, reducing the readability of a code base.
+We do <em>not</em> claim that CRTP should be used whenever possible but rather that it <em>can</em> be useful in certain contexts.
+For example, <a rel="external" href="https://eigen.tuxfamily.org">the Eigen library</a> uses CRTP to implement <a rel="external" href="https://en.wikipedia.org/wiki/Expression_templates">expression templates</a> in order to optimize its usage.</p>
+<p>In this short post, we demonstrate how to use CRTP to remove occurrences of the virtual keyword from a toy example.</p>
+<h2 id="virtual-polymorphism">Virtual polymorphism</h2>
+<p>Consider the following abstract class:</p>
+<pre><code data-lang="c++">class Animal {
+  string name;
+  virtual const vector&lt;string&gt; &amp;get_sounds() const = 0;
+
+public:
+  Animal(const string &amp;name) : name(name) {}
+  string get_random_sound(mt19937 &amp;gen) const {
+    const auto &amp;sounds = this-&gt;get_sounds();
+    uniform_int_distribution&lt;&gt; dist(0, sounds.size() - 1);
+    return sounds[dist(gen)];
+  }
+  string get_name() const { return name; }
+};
+</code></pre>
+<p>Its job is simple: whenever <code>get_random_sound</code> is called, the animal produces one of a finite number of sounds.
+The sound is chosen randomly from a list of sounds the animal is able to make.</p>
+<p>Lets add some animals:</p>
+<pre><code data-lang="c++">class Cat : public Animal {
+  const vector&lt;string&gt; &amp;get_sounds() const override {
+    static const vector&lt;string&gt; sounds = {&quot;hiss&quot;, &quot;meow&quot;};
+    return sounds;
+  }
+
+public:
+  Cat(const string &amp;name) : Animal(name) {}
+};
+
+class Dog : public Animal {
+  const vector&lt;string&gt; &amp;get_sounds() const override {
+    static const vector&lt;string&gt; sounds = {&quot;bark&quot;, &quot;growl&quot;, &quot;whine&quot;};
+    return sounds;
+  }
+
+public:
+  Dog(const string &amp;name) : Animal(name) {}
+};
+</code></pre>
+<p>Finally, let's have some animals produce some sounds:</p>
+<pre><code data-lang="c++">int main() {
+  random_device rd;
+  mt19937 gen(rd());
+
+  vector&lt;unique_ptr&lt;Animal&gt;&gt; animals;
+  animals.emplace_back(make_unique&lt;Cat&gt;(&quot;Charlie&quot;));
+  animals.emplace_back(make_unique&lt;Dog&gt;(&quot;Daisy&quot;));
+
+  for (auto &amp;animal : animals) {
+    cout &lt;&lt; animal-&gt;get_name() &lt;&lt; &quot;: &quot; &lt;&lt; animal-&gt;get_random_sound(gen) &lt;&lt; endl;
+  }
+
+  return 0;
+}
+</code></pre>
+<p>Running this program, we might see output such as the following:</p>
+<pre><code>Charlie: meow
+Daisy: whine
+</code></pre>
+<h2 id="crtp-polymorphism">CRTP polymorphism</h2>
+<p>Now, let's translate our implementation to CRTP.
+The main idea in CRTP is to template the base class as <code>Base&lt;Derived&gt;</code> (in our case, the base class is <code>Animal</code>) in order to access the members of the derived class from the base class code.
+Below is our revised base class.</p>
+<pre><code data-lang="c++">template &lt;typename Derived&gt; class Animal {
+  string name;
+
+public:
+  Animal(const string &amp;name) : name(name) {}
+  string get_name() const { return name; }
+  string get_random_sound(mt19937 &amp;gen) const {
+    const auto &amp;sounds = static_cast&lt;const Derived &amp;&gt;(*this).get_sounds();
+    uniform_int_distribution&lt;&gt; dist(0, sounds.size() - 1);
+    return sounds[dist(gen)];
+  }
+};
+</code></pre>
+<p>Casts of the form <code>static_cast&lt;const Derived &amp;&gt;(*this)</code> are common to CRTP code: this is because <code>this</code> is a pointer to the base class and we need to be able to treat it like a pointer to the derived class in order to access members of the derived class.</p>
+<p>Next, let's port our derived classes:</p>
+<pre><code data-lang="c++">class Cat : public Animal&lt;Cat&gt; {
+public:
+  static const vector&lt;string&gt; &amp;get_sounds() {
+    static const vector&lt;string&gt; sounds = {&quot;hiss&quot;, &quot;meow&quot;};
+    return sounds;
+  }
+
+public:
+  Cat(const string &amp;name) : Animal(name) {}
+};
+
+class Dog : public Animal&lt;Dog&gt; {
+public:
+  static const vector&lt;string&gt; &amp;get_sounds() {
+    static const vector&lt;string&gt; sounds = {&quot;bark&quot;, &quot;growl&quot;, &quot;whine&quot;};
+    return sounds;
+  }
+
+public:
+  Dog(const string &amp;name) : Animal(name) {}
+};
+</code></pre>
+<p>To avoid virtual table lookups, we use <a rel="external" href="https://en.cppreference.com/w/cpp/utility/variant"><code>variant</code></a> and <a rel="external" href="https://en.cppreference.com/w/cpp/utility/variant/visit"><code>visit</code></a> to iterate through the animals:</p>
+<pre><code data-lang="c++">int main() {
+  random_device rd;
+  mt19937 gen(rd());
+
+  vector&lt;variant&lt;Cat, Dog&gt;&gt; animals;
+  animals.emplace_back(Cat(&quot;Charlie&quot;));
+  animals.emplace_back(Dog(&quot;Daisy&quot;));
+
+  for (const auto &amp;animal : animals) {
+    visit(
+        [&amp;gen](const auto &amp;a) {
+          cout &lt;&lt; a.get_name() &lt;&lt; &quot;: &quot; &lt;&lt; a.get_random_sound(gen) &lt;&lt; endl;
+        },
+        animal);
+  }
+
+  return 0;
+}
+</code></pre>
+<h2 id="further-reading">Further reading</h2>
+<p>While the above example is useful in introducing CRTP, the interested reader is encouraged to read about <a rel="external" href="https://en.wikipedia.org/wiki/Expression_templates">expression templates</a> to see a more realistic application of CRTP.</p>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>
