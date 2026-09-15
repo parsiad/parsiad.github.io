@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SDEs and Monte Carlo in Octave Financial &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">SDEs and Monte Carlo in Octave Financial</h1>
+<time datetime="2015-12-01">December 1, 2015</time>
+<p>This post is a tutorial on my fist major contribution as maintainer of <a rel="external" href="http://octave.sourceforge.net/financial/">GNU Octave financial package</a>: a framework to simulate <a rel="external" href="https://en.wikipedia.org/wiki/Stochastic_differential_equation">stochastic differential equations (SDEs)</a> of the form</p>
+<p>$$
+dX_t = F(t, X_t) dt + G(t, X_t) dW_t
+$$</p>
+<p>where <em>W</em> is a standard <em>n</em>-dimensional <a rel="external" href="https://en.wikipedia.org/wiki/Wiener_process">Wiener process</a>.</p>
+<p>To follow along with the examples in this post you'll need a copy of GNU Octave and the Financial package. See the <a href="/blog/2016/octave_financial_0.5.0_released">release announcement post</a> for installation instructions.</p>
+<h2 id="a-one-dimensional-example-pricing-a-european-call">A one dimensional example: pricing a European call</h2>
+<p>A classic problem in finance is that of pricing a European <a rel="external" href="https://en.wikipedia.org/wiki/Call_option">call option</a>. The price of a European call option with strike price <em>K</em> and expiry time <em>T</em> years from now is given by</p>
+<p>$$
+\mathbb{E}\left[ e^{-rT} \max{X_T - K, 0} \right].
+$$</p>
+<p>In the celebrated Black-Scholes framework, the functions <em>F</em> and <em>G</em> which parameterize the SDE are taken to be <em>F</em>(<em>t</em>, <em>X<sub>t</sub></em>) = (<em>r</em> - 𝛿) <em>X<sub>t</sub></em> and <em>G</em>(<em>t</em>, <em>X<sub>t</sub></em>) = 𝜎 <em>X<sub>t</sub></em> where <em>r</em>, 𝛿, and 𝜎 are the per-annum interest, dividend, and volatility rates of the stock <em>X</em>.
+In other words,</p>
+<p>$$
+dX_t = \left(r - \delta\right) X_t dt + \sigma X_t dW_t.
+$$</p>
+<p>When <em>F</em> and <em>G</em> are linear functions of the state variable (as they are in this case), the SDE is called a <a rel="external" href="https://en.wikipedia.org/wiki/Geometric_Brownian_motion">Geometric Brownian Motion</a>.</p>
+<p>Approximating the above expectation using a sample mean is referred to as <em>Monte Carlo integration</em> or <em>Monte Carlo simulation</em>.
+Though the Black-Scholes pricing problem happens to be one in which a closed-form solution is known, as an expository example, let's perform Monte Carlo integration to approximate it using an SDE simulation:</p>
+<pre><code data-lang="matlab">% Test parameters
+X_0 = 100.; K = 100.; r = 0.04; delta = 0.01; sigma = 0.2; T = 1.;
+Simulations = 1e6; Timesteps = 10;
+
+SDE = gbm (r - delta, sigma, &quot;StartState&quot;, X_0);
+[Paths, ~, ~] = simByEuler (SDE, 1, &quot;DeltaTime&quot;, T, &quot;NTRIALS&quot;, Simulations, &quot;NSTEPS&quot;, Timesteps, &quot;Antithetic&quot;, true);
+
+% Monte Carlo price
+CallPrice_MC = exp (-r * T) * mean (max (Paths(end, 1, :) - K, 0.));
+
+% Compare with the exact answer (Black-Scholes formula): 9.3197
+</code></pre>
+<p>The <code>gbm</code> function is used to generate an object describing geometric Brownian motion (GBM). Under the hood, it invokes the <code>sde</code> constructor, which is capable of constructing more general SDEs.</p>
+<h2 id="timing">Timing</h2>
+<p>The GNU Octave financial implementation uses broadcasting to speed up computation. Here is a speed comparison of the above with the MATLAB Financial Toolbox, under a varying number of timesteps:</p>
+<table><thead><tr><th><strong>Timesteps</strong></th><th><strong>MATLAB Financial Toolbox (secs.)</strong></th><th><strong>GNU Octave financial package (secs.)</strong></th></tr></thead><tbody>
+<tr><td>16</td><td>0.543231</td><td>0.048691</td></tr>
+<tr><td>32</td><td>1.053423</td><td>0.064110</td></tr>
+<tr><td>64</td><td>2.167072</td><td>0.097092</td></tr>
+<tr><td>128</td><td>4.191894</td><td>0.162552</td></tr>
+<tr><td>256</td><td>8.361655</td><td>0.294098</td></tr>
+<tr><td>512</td><td>16.609718</td><td>0.568558</td></tr>
+<tr><td>1024</td><td>32.839757</td><td>1.136864</td></tr>
+</tbody></table>
+<p>While both implementations scale more-or-less linearly, the GNU Octave financial package implementation greatly outperforms its MATLAB counterpart.</p>
+<h2 id="a-two-dimensional-example-pricing-a-european-basket-call">A two dimensional example: pricing a European basket call</h2>
+<p>Consider now the basket call pricing problem</p>
+<p>$$
+\mathbb{E}\left[ e^{-rT} \max{\max{X_T^1, X_T^2} - K, 0} \right]
+$$</p>
+<p>involving two stocks <em>X<sup>1</sup></em> and <em>X<sup>2</sup></em> which follow the SDEs</p>
+<p>$$
+dX_t^i = \left(r^i - \delta^i\right) X_t^i dt + \sigma^i X_t^i dW_t^i \qquad \text{for } i = 1,2.
+$$</p>
+<p>To make matters more interesting, we also assume a correlation between the coordinates of the Wiener process:</p>
+<p>$$
+dW_t^1 dW_t^2 = \rho dt.
+$$</p>
+<p>Sample code for this example is below:</p>
+<pre><code data-lang="matlab">% Test parameters
+X1_0 = 40.; X2_0 = 40.; K = 40.; r = 0.05; delta1 = 0.; delta2 = 0.; sigma1 = 0.5; sigma2 = 0.5; T = 0.25; rho = 0.3;
+Simulations = 1e5; Timesteps = 10;
+
+SDE = gbm ([r-delta1 0.; 0. r-delta2], [sigma1 0.; 0. sigma2], &quot;StartState&quot;, [X1_0; X2_0], &quot;Correlation&quot;, [1 rho; rho 1]);
+[Paths, ~, ~] = simulate (SDE, 1, &quot;DeltaTime&quot;, T, &quot;NTRIALS&quot;, Simulations, &quot;NSTEPS&quot;, Timesteps, &quot;Antithetic&quot;, true);
+
+Max_Xi_T = max (Paths(end, :, :));
+BasketCallPrice_MC = exp (-r * T) * mean (max (Max_Xi_T - K, 0.));
+
+% Compare with the exact answer (Stulz 1982): 6.8477
+</code></pre>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>
