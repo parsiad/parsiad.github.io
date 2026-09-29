@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Updating the Cholesky decomposition of a matrix &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">Updating the Cholesky decomposition of a matrix</h1>
+<time datetime="2023-07-14">July 14, 2023</time>
+<p>Sometimes, we already have the <a rel="external" href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a> of a given matrix and wish to update it efficiently when that matrix "grows" in size (i.e., through the addition of new rows/columns).
+Instead of recomputing the entire Cholesky decomposition from scratch, we can compute it incrementally.
+Moreover, this incremental computation can also be strung together to retrieve an iterative algorithm to compute the <em>full</em> Cholesky decomposition.</p>
+<h2 id="algorithm">Algorithm</h2>
+<p>Let $A_n \equiv (a_{ij})$ be an $n \times n$ positive definite matrix with Cholesky decomposition $L_nL_n^*$.
+Next, consider expanding the size of this matrix (while maintaining positive definiteness):</p>
+<p>$$
+A_{n+1}=\begin{pmatrix}A_{n} &amp; a_{n+1,1:n}^{*}\\
+a_{n+1,1:n} &amp; a_{n+1,n+1}
+\end{pmatrix}.
+$$</p>
+<p>The notation $a_{n+1,1:n}$ signifies a row vector with $n$ entries.
+Suppose the Cholesky decomposition of $A_{n + 1}$ has the following form:</p>
+<p>$$
+L_{n+1}=\begin{pmatrix}L_{n} &amp; 0\\
+\ell_{n+1,1:n} &amp; \ell_{n+1,n+1}
+\end{pmatrix}.
+$$</p>
+<p>Simple algebra reveals that</p>
+<p>$$
+L_{n+1}L_{n+1}^{*}=\begin{pmatrix}A_{n} &amp; L_{n}\ell_{n+1,1:n}^{*}\\
+\ell_{n+1,1:n}L_{n}^{*} &amp; \ell_{n+1,1:n}\ell_{n+1,1:n}^{*}+\left|\ell_{n+1,n+1}\right|^{2}
+\end{pmatrix}.
+$$</p>
+<p>This reveals that we need to solve the equations</p>
+<p>$$
+L_n \ell_{n+1,1:n}^* = a_{n+1,1:n}^*
+$$</p>
+<p>and</p>
+<p>$$
+\ell_{n+1,n+1} = \sqrt{a_{n+1,n+1} - \Vert \ell_{n+1, 1:n}\Vert^2}
+$$</p>
+<p>to obtain the updated Cholesky decomposition.
+Since the former involves a triangular matrix, it can be solved by forward substitution in $O(n^2)$ floating point operations (FLOPs).
+The latter requires $O(n)$ FLOPs due to the norm.</p>
+<h2 id="implementation">Implementation</h2>
+<pre><code data-lang="python">def update_chol(chol: NDArray, new_vec: NDArray) -&gt; NDArray:
+    &quot;&quot;&quot;Update the Cholesky factorization of a matrix for real inputs.&quot;&quot;&quot;
+    u = new_vec[:-1]
+    α = new_vec[-1]
+    v = scipy.linalg.solve_triangular(chol, u, lower=True)
+    β = np.sqrt(α - v @ v)
+    n = chol.shape[0]
+    # WARNING: This is not efficient!
+    new_chol = chol.copy()
+    new_chol = np.pad(new_chol, [(0, 1), (0, 1)])
+    new_chol[:-1, :-1] = chol
+    new_chol[-1, :-1] = v
+    new_chol[n, n] = β
+    return new_chol
+</code></pre>
+<pre><code data-lang="python">np.random.seed(42)
+x = np.random.randn(5, 5)
+a = x.T @ x
+np.linalg.cholesky(a)
+</code></pre>
+<pre><code>array([[ 1.72643986,  0.        ,  0.        ,  0.        ,  0.        ],
+       [ 0.00926244,  1.9510639 ,  0.        ,  0.        ,  0.        ],
+       [-0.02770041,  0.34669923,  1.02437592,  0.        ,  0.        ],
+       [ 0.10163684,  0.60454141, -0.41500106,  2.91668584,  0.        ],
+       [ 0.31988585,  1.66212358, -1.17204427,  1.10508656,  0.39447333]])
+</code></pre>
+<pre><code data-lang="python">chol = np.linalg.cholesky(a[:-1, :-1])
+update_chol(chol, a[-1])
+</code></pre>
+<pre><code>array([[ 1.72643986,  0.        ,  0.        ,  0.        ,  0.        ],
+       [ 0.00926244,  1.9510639 ,  0.        ,  0.        ,  0.        ],
+       [-0.02770041,  0.34669923,  1.02437592,  0.        ,  0.        ],
+       [ 0.10163684,  0.60454141, -0.41500106,  2.91668584,  0.        ],
+       [ 0.31988585,  1.66212358, -1.17204427,  1.10508656,  0.39447333]])
+</code></pre>
+<h2 id="iterative-method">Iterative method</h2>
+<p>Note that by applying the algorithm iteratively, it can be used to obtain the <em>full</em> Cholesky decomposition of a positive definite matrix $A_N \equiv (a_{ij})$.
+The base case is $L_1 = (\sqrt{a_{11}})$.
+Assuming each square root takes $c$ FLOPs, the total cost is</p>
+<p>$$
+c + \sum_{n=1}^{N-1} n^2 + n + 1 + c = \frac{1}{3} N^{3} + \left( c + \frac{2}{3} \right) N - 1.
+$$</p>
+<p>In particular, the leading term shows that this algorithm is roughly half the complexity of Gaussian elimination applied to arbitrary (i.e., not necessarily positive definite) matrices.</p>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>

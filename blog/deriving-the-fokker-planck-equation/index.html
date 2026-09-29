@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Deriving the Fokker-Planck equation &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">Deriving the Fokker-Planck equation</h1>
+<time datetime="2024-01-19">January 19, 2024</time>
+<h2 id="motivation">Motivation</h2>
+<p>The Fokker-Planck equation is a <a rel="external" href="https://en.wikipedia.org/wiki/Partial_differential_equation">partial differential equation</a> (PDE) which describes the evolution of the <a rel="external" href="https://en.wikipedia.org/wiki/Probability_density_function">probability density function</a> of an <a rel="external" href="https://en.wikipedia.org/wiki/It%C3%B4_diffusion">Ito diffusion</a>.
+Since it is a PDE, it admits solutions in certain special cases and is amenable to <a rel="external" href="https://en.wikipedia.org/wiki/Partial_differential_equation#Numerical_solutions">numerical methods for PDEs</a> in the general case.</p>
+<h2 id="derivation">Derivation</h2>
+<p>Consider the SDE</p>
+<p>$$
+\mathrm{d}X_{t}=a(t,X_{t})\mathrm{d}t+b(t,X_{t})\mathrm{d}W_{t}
+$$</p>
+<p>with bounded coefficients: (i.e., $\sup_{t,x}|a(t,x)|+\sup_{t,x}|b(t,x)|&lt;\infty$).
+This requirement is used below to apply Fubini's theorem but can be relaxed.</p>
+<p>Let $f:\mathbb{R}\rightarrow\mathbb{R}$ be smooth with compact support.
+By Ito's lemma,</p>
+<p>$$
+\mathrm{d}f=f_{x}\mathrm{d}X_{t}+\frac{1}{2}f_{xx}\mathrm{d}X_{t}^{2}=\left(af_{x}+\frac{1}{2}b^{2}f_{xx}\right)\mathrm{d}t+bf_{x}\mathrm{d}W_{t}.
+$$</p>
+<p>Taking expectations of both sides,</p>
+<p>$$
+\mathbb{E}\left[\mathrm{d}f\right]=\mathbb{E}\left[\left(af_{x}+\frac{1}{2}b^{2}f_{xx}\right)\mathrm{d}t\right].
+$$</p>
+<p>The above is formalism for the expression</p>
+<p>$$
+\mathbb{E}f(X_{T})-\mathbb{E}f(X_{t})=\mathbb{E}\left[\int_{t}^{T}a(s,X_{s})f_{x}(X_{s})+\frac{1}{2}b(s,X_{s})^{2}f_{xx}(X_{s})\mathrm{d}s\right].
+$$</p>
+<p>By <a rel="external" href="https://en.wikipedia.org/wiki/Fubini&#x27;s_theorem">Fubini's theorem</a>, we can interchange the expectation and integral on the right hand side.
+Moreover, by the <a rel="external" href="https://en.wikipedia.org/wiki/Mean_value_theorem">Mean Value Theorem</a>, we can find $\xi$ between $t$ and $T$ such that</p>
+<p>$$
+\frac{\mathbb{E}f(X_{T})-\mathbb{E}f(X_{t})}{T-t}=\mathbb{E}\left[a(\xi,X_{\xi})f_{x}(X_{\xi})+\frac{1}{2}b(\xi,X_{\xi})^{2}f_{xx}(X_{\xi})\right].
+$$</p>
+<p>Taking limits as $T\downarrow t$ and applying the <a rel="external" href="https://en.wikipedia.org/wiki/Dominated_convergence_theorem">Dominated Convergence Theorem</a>,</p>
+<p>$$
+\frac{\partial}{\partial t}\left[\mathbb{E}f(X_{t})\right]=\mathbb{E}\left[a(t,X_{t})f_{x}(X_{t})+\frac{1}{2}b(t,X_{t})^{2}f_{xx}(X_{t})\right].
+$$</p>
+<p>Let $p(t,\cdot)$ be the density of $X_{t}$.
+Then, the above is equivalent to</p>
+<p>$$
+\frac{\partial}{\partial t}\int p(t,x)f(x)\mathrm{d}x=\int p(t,x)\left(a(t,x)f_{x}(x)+\frac{1}{2}b(t,x)^{2}f_{xx}(x)\right)\mathrm{d}x.
+$$</p>
+<p>Applying <a rel="external" href="https://en.wikipedia.org/wiki/Integration_by_parts">integration by parts</a> to the right hand side,</p>
+<p>$$
+\frac{\partial}{\partial t}\int f(x)p(t,x)\mathrm{d}x=\int f(x)\left(-\frac{\partial}{\partial x}\left[p(t,x)a(t,x)\right]+\frac{1}{2}\frac{\partial^{2}}{\partial x^{2}}\left[p(t,x)b(t,x)^{2}\right]\right)\mathrm{d}x.
+$$</p>
+<p>Since this holds for all functions $f$, it follows that</p>
+<p>$$
+\frac{\partial p}{\partial t}(t,x)=-\frac{\partial}{\partial x}\left[p(t,x)a(t,x)\right]+\frac{1}{2}\frac{\partial^{2}}{\partial x^{2}}\left[p(t,x)b(t,x)^{2}\right].
+$$</p>
+<p>This is the Fokker-Planck equation in one dimension.
+The derivation for multiple dimensions is similar.</p>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>
