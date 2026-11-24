@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motivating the cross-entropy loss &mdash; Parsiad Azimzadeh</title>
+  <link href="/assets/main.css" rel="stylesheet">
+  <link href="/atom.xml" rel="alternate" title="Blog &mdash; Parsiad Azimzadeh" type="application/atom+xml">
+  <link crossorigin href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link crossorigin href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" integrity="sha384-uo/9/s/Ns8DTg4kjkjex8GezUcgMlKD99gTqxvMkIsaG4lSUbeJ0dVELljipv94t" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" rel="stylesheet">
+  <link crossorigin href="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/css/glightbox.min.css" integrity="sha384-GPAzSuZc0kFvdIev6wm9zg8gnafE8tLso7rsAYQfc9hAdWCpOcpcNI5W9lWkYcsd" rel="stylesheet">
+  <link crossorigin rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/equilibrium-gray-light.min.css">
+  <script src="/assets/main.js"></script>
+  <script type="module" src="/assets/module.js"></script>
+  <script crossorigin defer integrity="sha384-2B8pfmZZ6JlVoScJm/5hQfNS2TI/6hPqDZInzzPc8oHpN5SgeNOf4LzREO6p5YtZ" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js"></script>
+  <script crossorigin defer integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+  <script crossorigin integrity="sha384-MZZbZ6RXJudK43v1qY1zOWKOU2yfeBPatuFoKyHAaAgHTUZhwblRTc9CphTt4IGQ" src="https://cdn.jsdelivr.net/npm/glightbox@3.3.1/dist/js/glightbox.min.js"></script>
+</head>
+
+<body>
+  <h1>Parsiad Azimzadeh</h1>
+  <nav>
+    <ul>
+      <li><a href="/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/pubs/">Publications</a></li><li><a href="/code/">Code</a></li><li><a href="/sols/">Solutions</a></li>
+    </ul>
+  </nav>
+  <div id="content">
+<h1 class="title">Motivating the cross-entropy loss</h1>
+<time datetime="2023-09-23">September 23, 2023</time>
+<h2 id="introduction">Introduction</h2>
+<p>In machine learning, the cross-entropy loss is frequently introduced without explicitly emphasizing its underlying connection to the likelihood of a categorical distribution.
+Understanding this link can greatly enhance one's grasp of the loss and is the topic of this short post.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a rel="external" href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">maximum likelihood estimator (MLE)</a></li>
+</ul>
+<h2 id="categorical-distribution-likelihood">Categorical distribution likelihood</h2>
+<p>Consider an experiment in which we roll a (not necessarily fair) $K$-sided die.
+The result of this roll is an integer between $1$ and $K$ (inclusive) corresponding to the faces of the die. Let $q(k)$ be the probability of seeing the $k$-th face.
+What we have described here, in general, is a categorical random variable: a random variable which takes one of a finite number of values.
+Repeating this experiment multiple times yields IID random variables $X_{1},\ldots,X_{N}\sim\operatorname{Categorical}(q)$.</p>
+<p>Performing this experiment a finite number of times $N$ does not allow us to introspect $q$ precisely, but it does allow us to estimate it.
+One way to approximate $q(k)$ is by counting the number of times the die face $k$ was observed and normalizing the result:</p>
+<p>$$
+p(k)=\frac{1}{N}\sum_{n}[X_{n}=k]\tag{empirical PMF}
+$$</p>
+<p>where $[\cdot]$ is the <a rel="external" href="https://en.wikipedia.org/wiki/Iverson_bracket">Iverson bracket</a>. Since $Y_{n}=[X_{n}=k]$ is itself a random variable (an indicator random variable), the law of large numbers tells us that $p(k)$ converges (a.s.) to $\mathbb{E}Y_{1}=\mathbb{P}(X_{n}=k)=q(k)$.</p>
+<p>The likelihood of $q$ is</p>
+<p>$$
+\mathcal{L}(q)=\prod_{n}\prod_{k}q(k)^{[X_{n}=k]}=\prod_{k}q(k)^{\sum_{n}[X_{n}=k]}=\prod_{k}q(k)^{Np(k)}
+$$</p>
+<p>and hence its log-likelihood is</p>
+<p>$$
+\ell(q)=\log\mathcal{L}(q)=\sum_{k}Np(k)\log q(k)\propto\sum_{k}p(k)\log q(k).
+$$</p>
+<p><strong>Proposition</strong>. The MLE for the parameter of the categorical distribution is the empirical PMF above.</p>
+<p><em>Proof</em>. Consider the program</p>
+<p>$$
+\begin{aligned}
+\min_{q} &amp; -\ell(q)\\
+\text{subject to} &amp; \sum_{k}q(k)-1=0.
+\end{aligned}
+$$</p>
+<p>The <a rel="external" href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">Karush--Kuhn--Tucker stationarity condition</a> is</p>
+<p>$$
+-\frac{p(k)}{q(k)}+\lambda=0\text{ for }k=1,\ldots,K.
+$$</p>
+<p>In other words, the MLE $\hat{q}$ is a multiple of $p$.
+Since the MLE needs to be a probability vector, $\hat{q} = p$.</p>
+<h2 id="cross-entropy">Cross-entropy</h2>
+<p>The cross-entropy between $q$ relative to $p$ is</p>
+<p>$$
+H(p, q) = - \mathbb{E}_{X \sim p} [ \log q(X) ].
+$$</p>
+<p>The choice of logarithm base yields different units:</p>
+<ul>
+<li>base 2: <a rel="external" href="https://en.wikipedia.org/wiki/Bit">bits</a></li>
+<li>base e: <a rel="external" href="https://en.wikipedia.org/wiki/Nat_(unit)">nats</a></li>
+<li>base 10: <a rel="external" href="https://en.wikipedia.org/wiki/Hartley_(unit)">hartleys</a></li>
+</ul>
+<p>When $p$ and $q$ are probability mass functions (PMFs), the cross-entropy reduces to</p>
+<p>$$
+H(p, q) = - \sum_x p(x) \log q(x)
+$$</p>
+<p>which is exactly the (negation of the) log-likelihood we encountered above.
+As such, one can intuit that minimizing $q$ in the cross-entropy yields a distribution that is similar to $p$.
+In other words, <strong>the cross-entropy is an asymmetric measure of dissimilarity between $q$ and $p$.</strong></p>
+<p>The <a rel="external" href="https://en.m.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback--Leibler (KL) divergence</a> is another such measure:</p>
+<p>$$
+D_{\mathrm{KL}}(p\Vert q)
+=\mathbb{E}_{p}\left[\log\frac{p(X)}{q(X)}\right]
+=H(p,q) - H(p,p).
+$$</p>
+<p>Minimizing the KL divergence is the same as minimizing the cross-entropy, but the KL divergence satisfies some nice properties that one would expect of a measure of dissimilarity.
+In particular,</p>
+<ol>
+<li>$D_{\mathrm{KL}}(p\Vert q) \geq 0$</li>
+<li>$D_{\mathrm{KL}}(p\Vert p) = 0$</li>
+</ol>
+<p>We proved the first inequality for PMFs by showing that the choice of $q = p$ maximizes the cross-entropy.
+The second inequality is trivial.</p>
+<h2 id="cross-entropy-loss">Cross-entropy loss</h2>
+<p>Statistical classification is the problem of mapping each input datum $x \in \mathcal{X}$ to a class label $y = 1, \ldots, K$.
+For example, in the <a rel="external" href="https://en.wikipedia.org/wiki/CIFAR-10">CIFAR-10</a> classification task, each $x$ is a 32x32 color image and each $K = 10$ corresponding to ten distinct classes (e.g., airplanes, cats, trucks).</p>
+<p>A common parametric estimator for image classification tasks such as CIFAR-10 is a <a rel="external" href="https://en.wikipedia.org/wiki/Neural_network">neural network</a>: a differentiable map $f: \mathcal{X} \rightarrow \mathbb{R}^K$.
+Note, in particular, that the network outputs a vector of real numbers.
+These are typically transformed to probabilities by way of the <a rel="external" href="https://en.wikipedia.org/wiki/Softmax_function">softmax function</a> $\sigma$.
+In other words, for input $x$, $\hat{y} = \sigma(f(x))$ is a probability vector of size $K$.
+The $k$-th element of this vector is the "belief" that the network assigns to $x$ being a member of class $k$.</p>
+<p>Given a set of observations $\mathcal{D} = {(x_1, y_1), \ldots, (x_N, y_N)}$, the cross-entropy loss for this task is</p>
+<p>$$
+L(\mathcal{D}) = \frac{1}{N}\sum_{n}H(p_{n},q_{n})
+$$</p>
+<p>where $q_{n}=\sigma(f(x_{n}))$ and $p_{n}$ is the probability mass
+function which places all of its mass on $y_{n}$.
+Expanding this, we obtain what is to some the more familiar representation</p>
+<p>$$
+L(\mathcal{D}) = -\frac{1}{N}\sum_{n}[\log\sigma(f(x_{n}))]_{y_{n}}.
+$$</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li>PyTorch <a rel="external" href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html">CrossEntropyLoss</a></li>
+<li>Keras <a rel="external" href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy">CategoricalCrossentropy</a></li>
+</ul>
+
+</div>
+  <footer>Powered by <a href="https://getzola.org/">Zola</a></footer>
+</body>
+
+</html>
