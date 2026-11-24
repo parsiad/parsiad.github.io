@@ -18,9 +18,11 @@ A CV is available on request.
 
 ## Miscellany
 
-[![alt text](https://math.stackexchange.com/users/flair/64601.png?theme=clean "Parsiad's Mathematics Stack Exchange profile")](https://math.stackexchange.com/users/64601/par)
+[![Parsiad's Mathematics Stack Exchange profile and reputation](https://math.stackexchange.com/users/flair/64601.png?theme=clean "Parsiad's Mathematics Stack Exchange profile")](https://math.stackexchange.com/users/64601/par)
 
-[![alt text](https://camo.githubusercontent.com/6342ba8f2fd54509c6a5e735dfcd1b41200cf78616dc46b59875724a03692510/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f706172736961643f7374796c653d736f6369616c "Parsiad's GitHub profile")](https://github.com/parsiad)
+[![Parsiad's GitHub stars](https://img.shields.io/github/stars/parsiad "Parsiad's GitHub profile")](https://github.com/parsiad)
+
+[![Parsiad's Codeberg profile](https://img.shields.io/badge/Codeberg-parsiad-2185D0?logo=codeberg&style=social)](https://codeberg.org/parsiad)
 
 My [Erdős number](https://en.wikipedia.org/wiki/Erdős_number) is 4: Me → [G. Labahn](https://cs.uwaterloo.ca/~glabahn/) → [G. H. Golub](https://en.wikipedia.org/wiki/Gene_H._Golub) → [A. J. Hoffman](https://en.wikipedia.org/wiki/Alan_J._Hoffman) → [P. Erdős](https://en.wikipedia.org/wiki/Paul_Erd%C5%91s).
 
